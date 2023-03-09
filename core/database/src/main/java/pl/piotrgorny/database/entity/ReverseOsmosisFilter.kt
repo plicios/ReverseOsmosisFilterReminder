@@ -6,16 +6,19 @@ import java.util.*
 
 @Entity(tableName = ReverseOsmosisFilter.TABLE_NAME)
 data class ReverseOsmosisFilter(
-    @PrimaryKey val uid: Int,
     val filterSetupId: Int, //ForeignKey
     val type: FilterType,
     val name: String,
-    val lifeSpan: Int, //TODO Maybe change to some timeSpan
+    val lifeSpan: Int, //TODO Maybe change to some timeSpan type
     val installationDate: Date
 ) {
+    @PrimaryKey(autoGenerate = true)
+    var uid: Int = 0
     companion object {
         const val TABLE_NAME = "filter"
     }
 }
 
-enum class FilterType
+enum class FilterType { //TODO add more filter types
+    Carbon
+}

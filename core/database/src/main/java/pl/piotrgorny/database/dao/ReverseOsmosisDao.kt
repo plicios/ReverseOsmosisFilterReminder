@@ -6,11 +6,11 @@ import androidx.room.Update
 
 interface ReverseOsmosisDao<T> {
     @Insert
-    fun insert(vararg setups: T)
+    suspend fun insert(vararg setups: T)
 
     @Update
-    fun updateSetup(setup: T)
+    suspend fun updateSetup(setup: T)
 
     @Delete
-    fun deleteSetup(setup: T)
+    suspend fun deleteSetup(setup: T)
 }
