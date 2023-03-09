@@ -6,11 +6,11 @@ import java.util.Date
 
 @Entity(tableName = ReverseOsmosisFilterReminder.TABLE_NAME)
 data class ReverseOsmosisFilterReminder(
-    val filterId: Int, //ForeignKey
+    val filterId: Long, //ForeignKey
     val alarmDate: Date
 ) {
     @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
+    var uid: Long = 0
     companion object {
         const val TABLE_NAME = "filter_reminder"
     }

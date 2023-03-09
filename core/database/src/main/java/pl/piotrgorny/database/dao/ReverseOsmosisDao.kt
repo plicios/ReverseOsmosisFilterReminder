@@ -2,15 +2,16 @@ package pl.piotrgorny.database.dao
 
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Update
 
 interface ReverseOsmosisDao<T> {
-    @Insert
-    suspend fun insert(vararg setups: T)
+    @Insert(onConflict = REPLACE)
+    suspend fun insert(vararg entities: T) : List<Long>
 
     @Update
-    suspend fun updateSetup(setup: T)
+    suspend fun update(entity: T)
 
     @Delete
-    suspend fun deleteSetup(setup: T)
+    suspend fun delete(entity: T)
 }

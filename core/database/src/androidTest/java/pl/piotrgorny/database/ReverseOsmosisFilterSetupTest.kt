@@ -13,12 +13,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import pl.piotrgorny.database.dao.ReverseOsmosisFilterDao
-import pl.piotrgorny.database.dao.ReverseOsmosisFilterReminderDao
 import pl.piotrgorny.database.dao.ReverseOsmosisFilterSetupDao
-import pl.piotrgorny.database.entity.FilterType
-import pl.piotrgorny.database.entity.ReverseOsmosisFilter
-import pl.piotrgorny.database.entity.ReverseOsmosisFilterReminder
 import pl.piotrgorny.database.entity.ReverseOsmosisFilterSetup
 import java.io.IOException
 import java.util.*
@@ -30,10 +25,8 @@ import java.util.concurrent.CountDownLatch
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class SimpleEntityReadWriteTest {
+class ReverseOsmosisFilterSetupTest {
     private lateinit var reverseOsmosisFilterSetupDao: ReverseOsmosisFilterSetupDao
-    private lateinit var reverseOsmosisFilterDao: ReverseOsmosisFilterDao
-    private lateinit var reverseOsmosisFilterReminderDao: ReverseOsmosisFilterReminderDao
     private lateinit var db: ReverseOsmosisDatabase
 
 
@@ -43,8 +36,6 @@ class SimpleEntityReadWriteTest {
         db = Room.inMemoryDatabaseBuilder(
             context, ReverseOsmosisDatabase::class.java).build()
         reverseOsmosisFilterSetupDao = db.reverseOsmosisFilterSetupDao()
-        reverseOsmosisFilterDao = db.reverseOsmosisFilterDao()
-        reverseOsmosisFilterReminderDao = db.reverseOsmosisFilterReminderDao()
     }
 
     @After
@@ -71,19 +62,23 @@ class SimpleEntityReadWriteTest {
     }
 
     @Test
-    fun writeFilterAndReadInList() = runBlocking {
-        val filter = ReverseOsmosisFilter(
-            0,
-            FilterType.Carbon,
-            "test",
-            1,
-            Date()
+    fun updateFilterSetup() = runBlocking {
+        val filterSetup = ReverseOsmosisFilterSetup(
+            "test"
         )
-        reverseOsmosisFilterDao.insert(filter)
+        val modifiedFilterSetup = ReverseOsmosisFilterSetup(
+            "test2"
+        )
+
+        modifiedFilterSetup.uid = reverseOsmosisFilterSetupDao.insert(filterSetup).first()
+        reverseOsmosisFilterSetupDao.update(modifiedFilterSetup)
+
+
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            reverseOsmosisFilterDao.getByFilterSetup(0).collect {
-                assertThat(it).contains(filter)
+            reverseOsmosisFilterSetupDao.getAll().collect {
+                assertThat(it).doesNotContain(filterSetup)
+                assertThat(it).contains(modifiedFilterSetup)
                 latch.countDown()
             }
         }
@@ -92,16 +87,19 @@ class SimpleEntityReadWriteTest {
     }
 
     @Test
-    fun writeFilterReminderAndReadInList() = runBlocking {
-        val filterReminder = ReverseOsmosisFilterReminder(
-            0,
-            Date()
+    fun deleteFilterSetup() = runBlocking {
+        val filterSetup = ReverseOsmosisFilterSetup(
+            "test"
         )
-        reverseOsmosisFilterReminderDao.insert(filterReminder)
+
+        filterSetup.uid = reverseOsmosisFilterSetupDao.insert(filterSetup).first()
+
+        reverseOsmosisFilterSetupDao.delete(filterSetup)
+
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            reverseOsmosisFilterReminderDao.getByFilter(0).collect {
-                assertThat(it).contains(filterReminder)
+            reverseOsmosisFilterSetupDao.getAll().collect {
+                assertThat(it).doesNotContain(filterSetup)
                 latch.countDown()
             }
         }

@@ -8,7 +8,7 @@ data class ReverseOsmosisFilterSetup(
     val name: String
 ) {
     @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
+    var uid: Long = 0
     companion object {
         const val TABLE_NAME = "setup"
     }
