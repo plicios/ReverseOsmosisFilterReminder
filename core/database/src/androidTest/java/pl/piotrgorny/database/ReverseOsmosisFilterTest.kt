@@ -14,10 +14,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.piotrgorny.database.dao.ReverseOsmosisFilterDao
-import pl.piotrgorny.database.dao.ReverseOsmosisFilterSetupDao
-import pl.piotrgorny.database.entity.FilterType
 import pl.piotrgorny.database.entity.ReverseOsmosisFilter
-import pl.piotrgorny.database.entity.ReverseOsmosisFilterSetup
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -51,7 +48,7 @@ class ReverseOsmosisFilterTest {
     fun writeFilterSetupAndReadInList() = runBlocking {
         val filter = ReverseOsmosisFilter(
             0,
-            FilterType.Carbon,
+            "Carbon",
             "test",
             1,
             Date()
@@ -72,14 +69,14 @@ class ReverseOsmosisFilterTest {
     fun updateFilterSetup() = runBlocking {
         val filter = ReverseOsmosisFilter(
             0,
-            FilterType.Carbon,
+            "Carbon",
             "test",
             1,
             Date()
         )
         val modifiedFilter = ReverseOsmosisFilter(
             0,
-            FilterType.SemiPermeableMembrane,
+            "SemiPermeableMembrane",
             "test2",
             10,
             Date()
@@ -105,7 +102,7 @@ class ReverseOsmosisFilterTest {
     fun deleteFilterSetup() = runBlocking {
         val filter = ReverseOsmosisFilter(
             0,
-            FilterType.Carbon,
+            "Carbon",
             "test",
             1,
             Date()

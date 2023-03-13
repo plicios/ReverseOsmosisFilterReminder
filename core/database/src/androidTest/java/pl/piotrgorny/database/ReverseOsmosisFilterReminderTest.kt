@@ -13,7 +13,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import pl.piotrgorny.database.dao.ReverseOsmosisFilterDao
 import pl.piotrgorny.database.dao.ReverseOsmosisFilterReminderDao
 import pl.piotrgorny.database.entity.ReverseOsmosisFilterReminder
 import java.io.IOException

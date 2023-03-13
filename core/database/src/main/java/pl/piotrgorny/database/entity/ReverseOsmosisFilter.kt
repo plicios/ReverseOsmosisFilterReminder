@@ -7,7 +7,7 @@ import java.util.*
 @Entity(tableName = ReverseOsmosisFilter.TABLE_NAME)
 data class ReverseOsmosisFilter(
     val filterSetupId: Long, //ForeignKey
-    val type: FilterType,
+    val type: String,
     val name: String,
     val lifeSpan: Int, //TODO Maybe change to some timeSpan type
     val installationDate: Date
@@ -17,16 +17,4 @@ data class ReverseOsmosisFilter(
     companion object {
         const val TABLE_NAME = "filter"
     }
-}
-
-enum class FilterType { //TODO add more filter types
-    SedimentPS_20,
-    SedimentPS_10,
-    SedimentPS_5,
-    SedimentPS_1,
-    Carbon,
-    SemiPermeableMembrane,
-    InlineCarbon,
-    Mineralizing,
-    BioCeramic
 }
