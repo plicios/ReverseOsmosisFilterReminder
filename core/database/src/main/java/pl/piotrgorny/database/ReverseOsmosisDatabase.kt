@@ -11,7 +11,7 @@ import pl.piotrgorny.database.entity.ReverseOsmosisFilter
 import pl.piotrgorny.database.entity.ReverseOsmosisFilterReminder
 import pl.piotrgorny.database.entity.ReverseOsmosisFilterSetup
 
-@Database(entities = [ReverseOsmosisFilterSetup::class, ReverseOsmosisFilter::class, ReverseOsmosisFilterReminder::class], version = 1)
+@Database(entities = [ReverseOsmosisFilterSetup::class, ReverseOsmosisFilter::class, ReverseOsmosisFilterReminder::class], version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class ReverseOsmosisDatabase : RoomDatabase() {
     abstract fun reverseOsmosisFilterSetupDao(): ReverseOsmosisFilterSetupDao

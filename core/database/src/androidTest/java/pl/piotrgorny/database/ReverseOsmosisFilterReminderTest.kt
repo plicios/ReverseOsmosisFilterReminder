@@ -48,7 +48,8 @@ class ReverseOsmosisFilterReminderTest {
     fun writeFilterSetupAndReadInList() = runBlocking {
         val filterReminder = ReverseOsmosisFilterReminder(
             0,
-            Date()
+            Date(),
+            "buynew"
         )
         reverseOsmosisFilterReminderDao.insert(filterReminder)
         val latch = CountDownLatch(1)
@@ -66,11 +67,13 @@ class ReverseOsmosisFilterReminderTest {
     fun updateFilterSetup() = runBlocking {
         val filterReminder = ReverseOsmosisFilterReminder(
             0,
-            Date()
+            Date(),
+            "buynew"
         )
         val modifiedFilterReminder = ReverseOsmosisFilterReminder(
             0,
-            Date(Date().time + 4000)
+            Date(Date().time + 4000),
+            "buynew"
         )
 
         modifiedFilterReminder.uid = reverseOsmosisFilterReminderDao.insert(filterReminder).first()
@@ -93,7 +96,8 @@ class ReverseOsmosisFilterReminderTest {
     fun deleteFilterSetup() = runBlocking {
         val filterReminder = ReverseOsmosisFilterReminder(
             0,
-            Date()
+            Date(),
+            "buynew"
         )
 
         filterReminder.uid = reverseOsmosisFilterReminderDao.insert(filterReminder).first()

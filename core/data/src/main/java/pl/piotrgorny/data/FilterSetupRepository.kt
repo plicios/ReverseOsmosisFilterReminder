@@ -2,8 +2,7 @@ package pl.piotrgorny.data
 
 import pl.piotrgorny.model.FilterSetup
 
-class FilterSetupRepository {
-    suspend fun getFilterSetups(): List<FilterSetup>{
-        return emptyList()
-    }
+interface FilterSetupRepository {
+    suspend fun getFilterSetups(): List<FilterSetup>
+    suspend fun addFilterSetup(filterSetup: FilterSetup)
 }

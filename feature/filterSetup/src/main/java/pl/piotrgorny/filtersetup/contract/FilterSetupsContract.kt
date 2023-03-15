@@ -8,6 +8,7 @@ import pl.piotrgorny.mvi.ViewState
 class FilterSetupsContract {
     sealed class Event : ViewEvent {
         data class FilterSetupSelection(val filterSetup: FilterSetup) : Event()
+        object AddFilterSetup : Event()
     }
 
     data class State(val filterSetups: List<FilterSetup> = listOf(), val isLoading: Boolean = false) : ViewState
@@ -16,6 +17,7 @@ class FilterSetupsContract {
         object ToastDataWasLoaded : Effect()
         sealed class Navigation : Effect() {
             data class ToFilterSetupDetails(val filterSetup: FilterSetup) : Navigation()
+            object ToAddFilterSetup : Navigation()
         }
     }
 }

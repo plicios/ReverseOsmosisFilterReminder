@@ -9,11 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun AddFilterSetupView() {
-    Column(Modifier.fillMaxSize(),
+fun FilterSetupDetailsView() {
+    Column(
+        Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Add Filter Setup")
+        Text(text = "Filter Setup details")
     }
 }
