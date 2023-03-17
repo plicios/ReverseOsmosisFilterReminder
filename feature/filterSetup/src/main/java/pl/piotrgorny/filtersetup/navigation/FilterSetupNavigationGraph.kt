@@ -4,7 +4,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import pl.piotrgorny.filtersetup.FilterSetupsScreen
+import pl.piotrgorny.filtersetup.screen.AddFilterSetupScreen
+import pl.piotrgorny.filtersetup.screen.FilterSetupsScreen
 import pl.piotrgorny.filtersetup.view.AddFilterSetupView
 import pl.piotrgorny.filtersetup.view.FilterSetupDetailsView
 
@@ -20,7 +21,9 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
             )
         }
         composable(route = "addFilterSetup") {
-            AddFilterSetupView()
+            AddFilterSetupScreen {
+                navController.popBackStack("filterSetups", false)
+            }
         }
         composable(route = "filterSetupDetails") {
             FilterSetupDetailsView()

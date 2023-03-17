@@ -1,8 +1,9 @@
 package pl.piotrgorny.data
 
+import kotlinx.coroutines.flow.Flow
 import pl.piotrgorny.model.FilterSetup
 
 interface FilterSetupRepository {
-    suspend fun getFilterSetups(): List<FilterSetup>
+    fun getFilterSetups(): Flow<List<FilterSetup>>
     suspend fun addFilterSetup(filterSetup: FilterSetup)
 }

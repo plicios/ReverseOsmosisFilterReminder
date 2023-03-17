@@ -1,20 +1,20 @@
 package pl.piotrgorny.data.mock
 
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import pl.piotrgorny.data.FilterSetupRepository
 import pl.piotrgorny.model.FilterSetup
 
-class InMemoryFilterSetupRepository : FilterSetupRepository {
+object InMemoryFilterSetupRepository : FilterSetupRepository {
 
-    private val inMemoryList = mutableListOf(FilterSetup("Mock item"))
+    private val inMemoryList = MutableStateFlow(emptyList<FilterSetup>())
 
-    override suspend fun getFilterSetups(): List<FilterSetup> {
-//        delay(5000L)
-//        return emptyList()
-        return inMemoryList.toList()
+    override fun getFilterSetups(): Flow<List<FilterSetup>> {
+        return inMemoryList.asStateFlow()
     }
 
     override suspend fun addFilterSetup(filterSetup: FilterSetup) {
-        inMemoryList.add(filterSetup)
+        inMemoryList.value += filterSetup
     }
 }

@@ -9,7 +9,7 @@ import pl.piotrgorny.data.mock.InMemoryFilterSetupRepository
 import pl.piotrgorny.filtersetup.contract.FilterSetupsContract
 import pl.piotrgorny.mvi.MviBaseViewModel
 
-class FilterSetupViewModel(private val repository: FilterSetupRepository) : MviBaseViewModel<
+class FilterSetupsViewModel(private val repository: FilterSetupRepository) : MviBaseViewModel<
         FilterSetupsContract.Event,
         FilterSetupsContract.State,
         FilterSetupsContract.Effect>() {
@@ -32,16 +32,16 @@ class FilterSetupViewModel(private val repository: FilterSetupRepository) : MviB
     }
 
     private suspend fun getFilterSetups() {
-
-        val filterSetups = repository.getFilterSetups()
-        setState { copy(filterSetups = filterSetups, isLoading = false) }
-        setEffect { FilterSetupsContract.Effect.ToastDataWasLoaded }
+        repository.getFilterSetups().collect {
+            setState { copy(filterSetups = it, isLoading = false) }
+            setEffect { FilterSetupsContract.Effect.ToastDataWasLoaded }
+        }
     }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FilterSetupViewModel(InMemoryFilterSetupRepository()) as T
+            return FilterSetupsViewModel(InMemoryFilterSetupRepository) as T
         }
     }
 }

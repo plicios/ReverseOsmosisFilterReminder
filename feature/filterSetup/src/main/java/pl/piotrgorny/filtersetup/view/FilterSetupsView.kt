@@ -8,34 +8,19 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import pl.piotrgorny.filtersetup.contract.FilterSetupsContract
 import pl.piotrgorny.model.FilterSetup
 
 @Composable
 fun FilterSetupsView(
     state: FilterSetupsContract.State,
-    effectFlow: Flow<FilterSetupsContract.Effect>?,
-    onEventSent: (event: FilterSetupsContract.Event) -> Unit,
-    onNavigationRequested: (navigationEffect: FilterSetupsContract.Effect.Navigation) -> Unit
+    onEventSent: (event: FilterSetupsContract.Event) -> Unit
 ) {
-    LaunchedEffect("key") {//TODO add key
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is FilterSetupsContract.Effect.ToastDataWasLoaded -> {  }
-                is FilterSetupsContract.Effect.Navigation ->
-                    onNavigationRequested(effect)
-            }
-        }?.collect()
-    }
-    when{
+    when {
         state.isLoading -> {
             Column(modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
@@ -94,19 +79,9 @@ fun FilterSetupRow(filterSetup: FilterSetup, onItemClicked: (FilterSetup) -> Uni
             .fillMaxWidth()
             .padding(15.dp)
             .clickable { onItemClicked(filterSetup) },
-//        backgroundColor = Color.Transparent
     ) {
         Row(Modifier.padding(15.dp)) {
             Text(text = filterSetup.name)
         }
-    }
-
-}
-
-@Preview
-@Composable
-fun FilterSetupPreview() {
-    FilterSetupsList(filterSetups = listOf(FilterSetup("Preview"))) {
-
     }
 }
