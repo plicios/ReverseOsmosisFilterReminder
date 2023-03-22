@@ -3,7 +3,6 @@ package pl.piotrgorny.filtersetup.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -11,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import pl.piotrgorny.filtersetup.contract.AddFilterSetupContract
 import pl.piotrgorny.model.Filter
 
@@ -53,7 +51,14 @@ fun AddFilterSetupView(
             Text(text = "Add filter setup")
         }
         if(state.isAddFilterDialogOpen){
-            AddFilterDialog(onDismiss = { onEventSent(AddFilterSetupContract.Event.DismissAddFilter) })
+            AddFilterDialog(
+                onDismiss = {
+                    onEventSent(AddFilterSetupContract.Event.DismissAddFilter)
+                },
+                onFilterAdded = {
+                    onEventSent(AddFilterSetupContract.Event.AddFilter(it))
+                }
+            )
         }
     }
 }
@@ -67,30 +72,5 @@ fun FilterRow(filter: Filter) {
             Text(text = filter.installationDate.toString())
             Text(text = filter.lifeSpan.toString())
         }
-    }
-}
-
-@Composable
-fun AddFilterDialog(onDismiss: () -> Unit){
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colors.surface
-        ){
-            Column(modifier = Modifier.padding(20.dp)) {
-                Text(text = "title")
-                Spacer(modifier = Modifier.height(20.dp))
-                OutlinedTextField(value = "", onValueChange = {})
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = onDismiss) {
-                        Text(text = "Cancel")
-                    }
-                    TextButton(onClick = onDismiss) {
-                        Text(text = "Add")
-                    }
-                }
-            }
-        }
-
     }
 }

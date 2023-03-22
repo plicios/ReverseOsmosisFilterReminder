@@ -4,7 +4,6 @@ import pl.piotrgorny.model.Filter
 import pl.piotrgorny.mvi.ViewEvent
 import pl.piotrgorny.mvi.ViewSideEffect
 import pl.piotrgorny.mvi.ViewState
-import java.util.*
 
 class AddFilterSetupContract {
     sealed class Event : ViewEvent {
@@ -17,16 +16,7 @@ class AddFilterSetupContract {
 
     data class State(
         val name: String = "",
-        val filters: List<Filter> = listOf(
-            Filter("test", 1, Date(), Filter.Type.BioCeramic),
-            Filter("test", 1, Date(), Filter.Type.BioCeramic),
-            Filter("test", 1, Date(), Filter.Type.BioCeramic),
-            Filter("test", 1, Date(), Filter.Type.BioCeramic),
-            Filter("test", 1, Date(), Filter.Type.BioCeramic),
-            Filter("test", 1, Date(), Filter.Type.BioCeramic),
-            Filter("test", 1, Date(), Filter.Type.BioCeramic),
-            Filter("test", 1, Date(), Filter.Type.BioCeramic)
-        ),
+        val filters: List<Filter> = emptyList(),
         val isAddFilterDialogOpen: Boolean = false,
         val isLoading: Boolean = false) : ViewState
 

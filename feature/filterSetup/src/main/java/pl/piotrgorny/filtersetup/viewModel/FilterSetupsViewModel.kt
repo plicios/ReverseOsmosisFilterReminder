@@ -17,7 +17,7 @@ class FilterSetupsViewModel(private val repository: FilterSetupRepository) : Mvi
         viewModelScope.launch { getFilterSetups() }
     }
 
-    override fun setInitialState(): FilterSetupsContract.State =
+    override fun initialState(): FilterSetupsContract.State =
         FilterSetupsContract.State(isLoading = true)
 
     override fun handleEvents(event: FilterSetupsContract.Event) {

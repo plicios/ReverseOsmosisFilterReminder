@@ -15,7 +15,7 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
         AddFilterSetupContract.State,
         AddFilterSetupContract.Effect
         >() {
-    override fun setInitialState(): AddFilterSetupContract.State =
+    override fun initialState(): AddFilterSetupContract.State =
         AddFilterSetupContract.State(isLoading = true)
 
     override fun handleEvents(event: AddFilterSetupContract.Event) {
@@ -32,7 +32,7 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
                 setState { copy(name = event.name) }
             }
             is AddFilterSetupContract.Event.AddFilter -> {
-                setState { copy(filters = filters + event.filter) }
+                setState { copy(filters = filters + event.filter, isAddFilterDialogOpen = false) }
             }
             is AddFilterSetupContract.Event.RequestAddFilter -> {
                 setState { copy(isAddFilterDialogOpen = true) }

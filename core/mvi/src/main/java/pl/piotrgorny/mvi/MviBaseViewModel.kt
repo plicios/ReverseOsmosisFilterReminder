@@ -14,10 +14,10 @@ abstract class MviBaseViewModel<
         Event : ViewEvent,
         UiState : ViewState,
         Effect : ViewSideEffect> : ViewModel() {
-    private val initialState: UiState by lazy { setInitialState() }
-    abstract fun setInitialState(): UiState
+    private val _initialState: UiState by lazy { initialState() }
+    abstract fun initialState(): UiState
 
-    private val _viewState: MutableState<UiState> = mutableStateOf(initialState)
+    private val _viewState: MutableState<UiState> = mutableStateOf(_initialState)
     val viewState: State<UiState> = _viewState
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
