@@ -2,12 +2,13 @@ package pl.piotrgorny.ui.dialog
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import pl.piotrgorny.ui.dropdown.Dropdown
-import pl.piotrgorny.ui.dropdown.SimpleDropDownItem
 
 @Composable
 fun Dialog(

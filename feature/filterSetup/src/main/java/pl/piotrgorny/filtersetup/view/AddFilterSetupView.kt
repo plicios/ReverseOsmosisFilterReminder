@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import pl.piotrgorny.filtersetup.contract.AddFilterSetupContract
-import pl.piotrgorny.model.Filter
 
 @Composable
 fun AddFilterSetupView(
@@ -59,18 +58,6 @@ fun AddFilterSetupView(
                     onEventSent(AddFilterSetupContract.Event.AddFilter(it))
                 }
             )
-        }
-    }
-}
-
-@Composable
-fun FilterRow(filter: Filter) {
-    Card(modifier = Modifier.fillMaxWidth(), backgroundColor = MaterialTheme.colors.surface, elevation = 10.dp) {
-        Column(modifier = Modifier.padding(15.dp)) {
-            Text(text = filter.name)
-            Text(text = filter.type.toString())
-            Text(text = filter.installationDate.toString())
-            Text(text = filter.lifeSpan.toString())
         }
     }
 }

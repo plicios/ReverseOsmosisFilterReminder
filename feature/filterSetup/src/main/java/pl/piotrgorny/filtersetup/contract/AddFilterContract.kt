@@ -8,17 +8,15 @@ import java.util.Date
 
 class AddFilterContract {
     sealed class Event : ViewEvent {
-        data class NameChange(val name: String) : Event()
         data class TypeChange(val type: Filter.Type) : Event()
         data class LifeSpanChange(val lifeSpan: Filter.LifeSpan) : Event()
         data class InstallationDateChange(val installationDate: Date) : Event()
         object AddFilter: Event()
     }
     data class State(
-        val name: String = "",
         val type: Filter.Type? = null,
         val lifeSpan: Filter.LifeSpan? = null,
-        val installationDate: Date? = null
+        val installationDate: Date = Date()
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

@@ -13,9 +13,6 @@ class AddFilterViewModel : MviBaseViewModel<
 
     override fun handleEvents(event: AddFilterContract.Event) {
         when(event) {
-            is AddFilterContract.Event.NameChange -> {
-                setState { copy(name = event.name) }
-            }
             is AddFilterContract.Event.TypeChange -> {
                 setState { copy(type = event.type) }
             }
@@ -28,7 +25,8 @@ class AddFilterViewModel : MviBaseViewModel<
             is AddFilterContract.Event.AddFilter -> {
                 if (validateInput()) {
                     with(viewState.value){
-                        setEffect { AddFilterContract.Effect.FilterAdded(Filter(name, lifeSpan!!, installationDate!!, type!!)) }
+                        setEffect { AddFilterContract.Effect.FilterAdded(Filter(type!!,
+                            installationDate, lifeSpan!!)) }
                     }
                     setState { initialState() }
                 } else {

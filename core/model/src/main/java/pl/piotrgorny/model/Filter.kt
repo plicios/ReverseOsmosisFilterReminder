@@ -9,12 +9,11 @@ import org.joda.time.Years
 import java.util.*
 
 data class Filter(
-    val name: String,
-    val lifeSpan: LifeSpan,
+    val type: Type,
     val installationDate: Date,
-    val type: Type
+    val lifeSpan: LifeSpan
 ) {
-    fun getExpirationDate() = (LocalDate(installationDate) + lifeSpan.period).toDate()
+    fun getExpirationDate() : Date = (LocalDate(installationDate) + lifeSpan.period).toDate()
 
     enum class Type {
         SedimentPS_20,

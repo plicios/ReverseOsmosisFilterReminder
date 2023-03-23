@@ -1,7 +1,5 @@
 package pl.piotrgorny.filtersetup.view
 
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,8 +10,8 @@ import pl.piotrgorny.filtersetup.viewModel.AddFilterViewModel
 import pl.piotrgorny.model.Filter
 import pl.piotrgorny.ui.date.DateField
 import pl.piotrgorny.ui.dialog.Dialog
+import pl.piotrgorny.ui.dropdown.DropDownItem
 import pl.piotrgorny.ui.dropdown.Dropdown
-import pl.piotrgorny.ui.dropdown.EnumDropDownItem
 
 @Composable
 fun AddFilterDialog(onDismiss: () -> Unit, onFilterAdded: (Filter) -> Unit) {
@@ -37,25 +35,17 @@ fun AddFilterDialog(onDismiss: () -> Unit, onFilterAdded: (Filter) -> Unit) {
             viewModel.handleEvents(AddFilterContract.Event.AddFilter)
         }
     ) {
-        OutlinedTextField(
-            value = state.name,
-            onValueChange = {
-                viewModel.handleEvents(AddFilterContract.Event.NameChange(it))
-            },
-            label = {
-                Text(text = "Name")
-            }
-        )
         Dropdown(
             label = "Type",
             defaultValue = state.type?.name ?: "",
-            options = Filter.Type.values().map { EnumDropDownItem(it) },
+            options = Filter.Type.values().map { DropDownItem(it.print(), it) },
             onSelectedOptionChange = {
                 viewModel.handleEvents(AddFilterContract.Event.TypeChange(it))
             }
         )
         DateField(
             label = "Installation date",
+            initialDate = state.installationDate,
             onDateChange = {
                 viewModel.handleEvents(AddFilterContract.Event.InstallationDateChange(it))
             }
@@ -63,7 +53,7 @@ fun AddFilterDialog(onDismiss: () -> Unit, onFilterAdded: (Filter) -> Unit) {
         Dropdown(
             label = "Lifespan",
             defaultValue = state.lifeSpan?.name ?: "",
-            options = Filter.LifeSpan.values().map { EnumDropDownItem(it) },
+            options = Filter.LifeSpan.values().map { DropDownItem(it.print(), it) },
             onSelectedOptionChange = {
                 viewModel.handleEvents(AddFilterContract.Event.LifeSpanChange(it))
             }

@@ -34,7 +34,7 @@ fun <T> Dropdown(
             options.forEach {
                 DropdownMenuItem(onClick = {
                     selectedOptionText = it.title
-                    onSelectedOptionChange(it.itemValue)
+                    onSelectedOptionChange(it.item)
                     expanded = false
                 }) {
                     Text(text = it.title)
