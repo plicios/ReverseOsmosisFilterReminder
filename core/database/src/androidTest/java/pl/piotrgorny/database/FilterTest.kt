@@ -13,8 +13,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import pl.piotrgorny.database.dao.ReverseOsmosisFilterSetupDao
-import pl.piotrgorny.database.entity.ReverseOsmosisFilterSetup
+import pl.piotrgorny.database.dao.FilterDao
+import pl.piotrgorny.database.entity.Filter
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -25,8 +25,8 @@ import java.util.concurrent.CountDownLatch
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ReverseOsmosisFilterSetupTest {
-    private lateinit var reverseOsmosisFilterSetupDao: ReverseOsmosisFilterSetupDao
+class FilterTest {
+    private lateinit var filterDao: FilterDao
     private lateinit var db: ReverseOsmosisDatabase
 
 
@@ -35,7 +35,7 @@ class ReverseOsmosisFilterSetupTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(
             context, ReverseOsmosisDatabase::class.java).build()
-        reverseOsmosisFilterSetupDao = db.reverseOsmosisFilterSetupDao()
+        filterDao = db.filterDao()
     }
 
     @After
@@ -46,14 +46,17 @@ class ReverseOsmosisFilterSetupTest {
 
     @Test
     fun writeFilterSetupAndReadInList() = runBlocking {
-        val filterSetup = ReverseOsmosisFilterSetup(
-            "test"
+        val filter = Filter(
+            0,
+            "Carbon",
+            "one day",
+            Date()
         )
-        reverseOsmosisFilterSetupDao.insert(filterSetup)
+        filterDao.insert(filter)
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            reverseOsmosisFilterSetupDao.getAll().collect {
-                assertThat(it).contains(filterSetup)
+            filterDao.getByFilterSetup(0).collect {
+                assertThat(it).contains(filter)
                 latch.countDown()
             }
         }
@@ -63,22 +66,28 @@ class ReverseOsmosisFilterSetupTest {
 
     @Test
     fun updateFilterSetup() = runBlocking {
-        val filterSetup = ReverseOsmosisFilterSetup(
-            "test"
+        val filter = Filter(
+            0,
+            "Carbon",
+            "one day",
+            Date()
         )
-        val modifiedFilterSetup = ReverseOsmosisFilterSetup(
-            "test2"
+        val modifiedFilter = Filter(
+            0,
+            "SemiPermeableMembrane",
+            "two days",
+            Date()
         )
 
-        modifiedFilterSetup.uid = reverseOsmosisFilterSetupDao.insert(filterSetup).first()
-        reverseOsmosisFilterSetupDao.update(modifiedFilterSetup)
+        modifiedFilter.uid = filterDao.insert(filter).first()
+        filterDao.update(modifiedFilter)
 
 
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            reverseOsmosisFilterSetupDao.getAll().collect {
-                assertThat(it).doesNotContain(filterSetup)
-                assertThat(it).contains(modifiedFilterSetup)
+            filterDao.getByFilterSetup(0).collect {
+                assertThat(it).doesNotContain(filter)
+                assertThat(it).contains(modifiedFilter)
                 latch.countDown()
             }
         }
@@ -88,18 +97,21 @@ class ReverseOsmosisFilterSetupTest {
 
     @Test
     fun deleteFilterSetup() = runBlocking {
-        val filterSetup = ReverseOsmosisFilterSetup(
-            "test"
+        val filter = Filter(
+            0,
+            "Carbon",
+            "one day",
+            Date()
         )
 
-        filterSetup.uid = reverseOsmosisFilterSetupDao.insert(filterSetup).first()
+        filter.uid = filterDao.insert(filter).first()
 
-        reverseOsmosisFilterSetupDao.delete(filterSetup)
+        filterDao.delete(filter)
 
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            reverseOsmosisFilterSetupDao.getAll().collect {
-                assertThat(it).doesNotContain(filterSetup)
+            filterDao.getByFilterSetup(0).collect {
+                assertThat(it).doesNotContain(filter)
                 latch.countDown()
             }
         }

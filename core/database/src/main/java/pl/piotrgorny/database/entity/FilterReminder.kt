@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
-@Entity(tableName = ReverseOsmosisFilterReminder.TABLE_NAME)
-data class ReverseOsmosisFilterReminder(
+@Entity(tableName = FilterReminder.TABLE_NAME)
+data class FilterReminder(
     val filterId: Long, //ForeignKey
     val alarmDate: Date,
     val type: String

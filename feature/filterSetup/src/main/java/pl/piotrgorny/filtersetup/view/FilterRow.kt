@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
@@ -19,7 +19,7 @@ import pl.piotrgorny.model.Filter
 import java.util.*
 
 @Composable
-fun FilterRow(filter: Filter) {
+fun FilterRow(filter: Filter, onFilterEditPress: (Filter) -> Unit = {}) {
     Card(modifier = Modifier.fillMaxWidth(), backgroundColor = MaterialTheme.colors.surface, elevation = 10.dp) {
         BoxWithConstraints {
             val constraints = filterRowDecoupledConstraints()
@@ -36,10 +36,10 @@ fun FilterRow(filter: Filter) {
                 Text(text = filter.getExpirationDate().print(), modifier = Modifier.layoutId("expirationDate"))
                 Text(text = filter.lifeSpan.print(), modifier = Modifier.layoutId("lifeSpan"))
 
-                IconButton(modifier = Modifier.layoutId("delete"), onClick = { }) {
+                IconButton(modifier = Modifier.layoutId("edit"), onClick = { onFilterEditPress(filter) }) {
                     Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "delete filter"
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = "edit filter"
                     )
                 }
             }
@@ -56,7 +56,7 @@ private fun filterRowDecoupledConstraints() = ConstraintSet {
     val expirationDate = createRefFor("expirationDate")
     val lifeSpanLabel = createRefFor("lifeSpanLabel")
     val lifeSpan = createRefFor("lifeSpan")
-    val delete = createRefFor("delete")
+    val edit = createRefFor("edit")
 
     val labelEndBarrier = createEndBarrier(typeLabel, installationDateLabel, expirationDateLabel, lifeSpanLabel)
 
@@ -76,7 +76,7 @@ private fun filterRowDecoupledConstraints() = ConstraintSet {
 
     constrain(type){
         top.linkTo(typeLabel.top)
-        linkTo(labelEndBarrier, delete.start, 5.dp, 5.dp, bias = 0f)
+        linkTo(labelEndBarrier, edit.start, 5.dp, 5.dp, bias = 0f)
         width = Dimension.preferredWrapContent
     }
     constrain(installationDate){
@@ -92,7 +92,7 @@ private fun filterRowDecoupledConstraints() = ConstraintSet {
         start.linkTo(labelEndBarrier, 5.dp)
     }
 
-    constrain(delete){
+    constrain(edit){
         top.linkTo(parent.top)
         end.linkTo(parent.end)
     }

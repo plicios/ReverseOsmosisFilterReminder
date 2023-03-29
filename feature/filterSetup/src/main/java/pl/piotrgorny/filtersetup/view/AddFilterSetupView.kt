@@ -43,13 +43,15 @@ fun AddFilterSetupView(
             .weight(1f)
             .padding(bottom = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(state.filters) {
-                FilterRow(filter = it)
+                FilterRow(filter = it, onFilterEditPress = { filter ->
+                    onEventSent(AddFilterSetupContract.Event.RequestModifyFilter(filter))
+                })
             }
         }
         Button(onClick = { onEventSent(AddFilterSetupContract.Event.AddFilterSetup) }) {
             Text(text = "Add filter setup")
         }
-        if(state.isAddFilterDialogOpen){
+        if(state.isAddingFilter){
             AddFilterDialog(
                 onDismiss = {
                     onEventSent(AddFilterSetupContract.Event.DismissAddFilter)
@@ -57,6 +59,14 @@ fun AddFilterSetupView(
                 onFilterAdded = {
                     onEventSent(AddFilterSetupContract.Event.AddFilter(it))
                 }
+            )
+        }
+        state.filterBeingModified?.let {
+            ModifyFilterDialog(
+                filter = it,
+                onDismiss = { onEventSent(AddFilterSetupContract.Event.DismissModifyFilter) },
+                onFilterRemoved = { filter -> onEventSent(AddFilterSetupContract.Event.RemoveFilter(filter)) },
+                onFilterModified = { newFilter, oldFilter -> onEventSent(AddFilterSetupContract.Event.ModifyFilter(oldFilter, newFilter))}
             )
         }
     }

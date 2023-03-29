@@ -1,24 +1,23 @@
 package pl.piotrgorny.filtersetup.viewModel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import pl.piotrgorny.data.FilterSetupRepository
-import pl.piotrgorny.data.mock.InMemoryFilterSetupRepository
+import pl.piotrgorny.data.database.DatabaseFilterSetupRepository
 import pl.piotrgorny.filtersetup.contract.FilterSetupsContract
 import pl.piotrgorny.mvi.MviBaseViewModel
 
 class FilterSetupsViewModel(private val repository: FilterSetupRepository) : MviBaseViewModel<
         FilterSetupsContract.Event,
         FilterSetupsContract.State,
-        FilterSetupsContract.Effect>() {
+        FilterSetupsContract.Effect>(FilterSetupsContract.State(isLoading = true)) {
     init {
         viewModelScope.launch { getFilterSetups() }
     }
 
-    override fun initialState(): FilterSetupsContract.State =
-        FilterSetupsContract.State(isLoading = true)
 
     override fun handleEvents(event: FilterSetupsContract.Event) {
         when (event) {
@@ -38,10 +37,13 @@ class FilterSetupsViewModel(private val repository: FilterSetupRepository) : Mvi
         }
     }
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val context: Context) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FilterSetupsViewModel(InMemoryFilterSetupRepository) as T
+            return FilterSetupsViewModel(
+//                InMemoryFilterSetupRepository
+                    DatabaseFilterSetupRepository.instance(context)
+            ) as T
         }
     }
 }

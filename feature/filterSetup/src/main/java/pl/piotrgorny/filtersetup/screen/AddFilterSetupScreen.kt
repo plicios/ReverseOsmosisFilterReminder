@@ -2,6 +2,7 @@ package pl.piotrgorny.filtersetup.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -11,7 +12,8 @@ import pl.piotrgorny.filtersetup.viewModel.AddFilterSetupViewModel
 
 @Composable
 fun AddFilterSetupScreen(navigateBackToList: () -> Unit) {
-    val viewModel: AddFilterSetupViewModel = viewModel(factory = AddFilterSetupViewModel.Factory())
+    val viewModel: AddFilterSetupViewModel = viewModel(factory = AddFilterSetupViewModel.Factory(
+        LocalContext.current))
     val state = viewModel.viewState.value
 
     LaunchedEffect("key") {//TODO add key

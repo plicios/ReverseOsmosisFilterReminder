@@ -4,12 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName = ReverseOsmosisFilter.TABLE_NAME)
-data class ReverseOsmosisFilter(
+@Entity(tableName = Filter.TABLE_NAME)
+data class Filter(
     val filterSetupId: Long, //ForeignKey
     val type: String,
-    val name: String,
-    val lifeSpan: Int, //TODO Maybe change to some timeSpan type
+    val lifeSpan: String,
     val installationDate: Date
 ) {
     @PrimaryKey(autoGenerate = true)

@@ -3,8 +3,8 @@ package pl.piotrgorny.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = ReverseOsmosisFilterSetup.TABLE_NAME)
-data class ReverseOsmosisFilterSetup(
+@Entity(tableName = FilterSetup.TABLE_NAME)
+data class FilterSetup(
     val name: String
 ) {
     @PrimaryKey(autoGenerate = true)

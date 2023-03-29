@@ -1,11 +1,12 @@
 package pl.piotrgorny.filtersetup.viewModel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import pl.piotrgorny.data.FilterSetupRepository
-import pl.piotrgorny.data.mock.InMemoryFilterSetupRepository
+import pl.piotrgorny.data.database.DatabaseFilterSetupRepository
 import pl.piotrgorny.filtersetup.contract.AddFilterSetupContract
 import pl.piotrgorny.model.FilterSetup
 import pl.piotrgorny.mvi.MviBaseViewModel
@@ -14,9 +15,7 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
         AddFilterSetupContract.Event,
         AddFilterSetupContract.State,
         AddFilterSetupContract.Effect
-        >() {
-    override fun initialState(): AddFilterSetupContract.State =
-        AddFilterSetupContract.State(isLoading = true)
+        >(AddFilterSetupContract.State(isLoading = true)) {
 
     override fun handleEvents(event: AddFilterSetupContract.Event) {
         when(event){
@@ -32,13 +31,25 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
                 setState { copy(name = event.name) }
             }
             is AddFilterSetupContract.Event.AddFilter -> {
-                setState { copy(filters = filters + event.filter, isAddFilterDialogOpen = false) }
+                setState { copy(filters = filters + event.filter, isAddingFilter = false) }
             }
             is AddFilterSetupContract.Event.RequestAddFilter -> {
-                setState { copy(isAddFilterDialogOpen = true) }
+                setState { copy(isAddingFilter = true) }
             }
             is AddFilterSetupContract.Event.DismissAddFilter -> {
-                setState { copy(isAddFilterDialogOpen = false) }
+                setState { copy(isAddingFilter = false) }
+            }
+            is AddFilterSetupContract.Event.RequestModifyFilter -> {
+                setState { copy(filterBeingModified = event.filter) }
+            }
+            is AddFilterSetupContract.Event.DismissModifyFilter -> {
+                setState { copy(filterBeingModified = null) }
+            }
+            is AddFilterSetupContract.Event.ModifyFilter -> {
+                setState { copy(filters = filters - event.oldFilter + event.newFilter, filterBeingModified = null) }
+            }
+            is AddFilterSetupContract.Event.RemoveFilter -> {
+                setState { copy(filters = filters - event.filter, filterBeingModified = null) }
             }
         }
     }
@@ -60,10 +71,15 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
         return null
     }
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val context: Context) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AddFilterSetupViewModel(InMemoryFilterSetupRepository) as T
+            return AddFilterSetupViewModel(
+//                InMemoryFilterSetupRepository
+                DatabaseFilterSetupRepository.instance(
+                    context
+                )
+            ) as T
         }
     }
 }

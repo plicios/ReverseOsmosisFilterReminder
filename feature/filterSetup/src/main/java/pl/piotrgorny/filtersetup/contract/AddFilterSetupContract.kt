@@ -11,13 +11,18 @@ class AddFilterSetupContract {
         data class NameChange(val name: String) : Event()
         object RequestAddFilter : Event()
         object DismissAddFilter : Event()
+        data class RequestModifyFilter(val filter: Filter) : Event()
+        object DismissModifyFilter : Event()
         data class AddFilter(val filter: Filter) : Event()
+        data class ModifyFilter(val oldFilter: Filter, val newFilter: Filter) : Event()
+        data class RemoveFilter(val filter: Filter) : Event()
     }
 
     data class State(
         val name: String = "",
         val filters: List<Filter> = emptyList(),
-        val isAddFilterDialogOpen: Boolean = false,
+        val isAddingFilter: Boolean = false,
+        val filterBeingModified: Filter? = null,
         val isLoading: Boolean = false) : ViewState
 
     sealed class Effect : ViewSideEffect {

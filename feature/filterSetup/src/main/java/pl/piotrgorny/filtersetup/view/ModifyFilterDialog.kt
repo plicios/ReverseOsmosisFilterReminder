@@ -5,23 +5,30 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import pl.piotrgorny.filtersetup.contract.AddFilterContract
+import pl.piotrgorny.filtersetup.contract.ModifyFilterContract
 import pl.piotrgorny.filtersetup.extensions.print
-import pl.piotrgorny.filtersetup.viewModel.AddFilterViewModel
+import pl.piotrgorny.filtersetup.viewModel.ModifyFilterViewModel
 import pl.piotrgorny.model.Filter
 import pl.piotrgorny.ui.date.DateField
 import pl.piotrgorny.ui.dialog.Dialog
 import pl.piotrgorny.ui.dropdown.DropDownItem
 import pl.piotrgorny.ui.dropdown.Dropdown
 
+
 @Composable
-fun AddFilterDialog(onDismiss: () -> Unit, onFilterAdded: (Filter) -> Unit) {
-    val viewModel: AddFilterViewModel = viewModel()
+fun ModifyFilterDialog(
+    filter: Filter,
+    onDismiss: () -> Unit,
+    onFilterRemoved: (Filter) -> Unit,
+    onFilterModified: (newFilter: Filter, oldFilter: Filter) -> Unit
+) {
+    val viewModel: ModifyFilterViewModel = viewModel(factory = ModifyFilterViewModel.Factory(filter))
 
     LaunchedEffect("key") {//TODO add key
         viewModel.effect.onEach { effect ->
             when (effect) {
-                is AddFilterContract.Effect.FilterAdded -> onFilterAdded(effect.filter)
+                is ModifyFilterContract.Effect.FilterModified -> onFilterModified(effect.newFilter, effect.oldFilter)
+                is ModifyFilterContract.Effect.FilterRemoved -> onFilterRemoved(effect.filter)
             }
         }.collect()
     }
@@ -33,7 +40,7 @@ fun AddFilterDialog(onDismiss: () -> Unit, onFilterAdded: (Filter) -> Unit) {
         confirmButtonTitle = "Add",
         onDismiss = onDismiss,
         onConfirm = {
-            viewModel.handleEvents(AddFilterContract.Event.AddFilter)
+            viewModel.handleEvents(ModifyFilterContract.Event.ModifyFilter)
         }
     ) {
         Dropdown(
@@ -41,14 +48,14 @@ fun AddFilterDialog(onDismiss: () -> Unit, onFilterAdded: (Filter) -> Unit) {
             defaultValue = state.type?.name ?: "",
             options = Filter.Type.values().map { DropDownItem(it.print(), it) },
             onSelectedOptionChange = {
-                viewModel.handleEvents(AddFilterContract.Event.TypeChange(it))
+                viewModel.handleEvents(ModifyFilterContract.Event.TypeChange(it))
             }
         )
         DateField(
             label = "Installation date",
             initialDate = state.installationDate,
             onDateChange = {
-                viewModel.handleEvents(AddFilterContract.Event.InstallationDateChange(it))
+                viewModel.handleEvents(ModifyFilterContract.Event.InstallationDateChange(it))
             }
         )
         Dropdown(
@@ -56,7 +63,7 @@ fun AddFilterDialog(onDismiss: () -> Unit, onFilterAdded: (Filter) -> Unit) {
             defaultValue = state.lifeSpan?.name ?: "",
             options = Filter.LifeSpan.values().map { DropDownItem(it.print(), it) },
             onSelectedOptionChange = {
-                viewModel.handleEvents(AddFilterContract.Event.LifeSpanChange(it))
+                viewModel.handleEvents(ModifyFilterContract.Event.LifeSpanChange(it))
             }
         )
     }

@@ -8,8 +8,7 @@ class AddFilterViewModel : MviBaseViewModel<
         AddFilterContract.Event,
         AddFilterContract.State,
         AddFilterContract.Effect
->() {
-    override fun initialState(): AddFilterContract.State = AddFilterContract.State()
+>(AddFilterContract.State()) {
 
     override fun handleEvents(event: AddFilterContract.Event) {
         when(event) {
@@ -28,7 +27,7 @@ class AddFilterViewModel : MviBaseViewModel<
                         setEffect { AddFilterContract.Effect.FilterAdded(Filter(type!!,
                             installationDate, lifeSpan!!)) }
                     }
-                    setState { initialState() }
+                    setState { initialState }
                 } else {
                     //TODO add error handling
                 }

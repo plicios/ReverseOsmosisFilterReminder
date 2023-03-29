@@ -13,8 +13,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import pl.piotrgorny.database.dao.ReverseOsmosisFilterReminderDao
-import pl.piotrgorny.database.entity.ReverseOsmosisFilterReminder
+import pl.piotrgorny.database.dao.FilterSetupDao
+import pl.piotrgorny.database.entity.FilterSetup
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -25,8 +25,8 @@ import java.util.concurrent.CountDownLatch
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ReverseOsmosisFilterReminderTest {
-    private lateinit var reverseOsmosisFilterReminderDao: ReverseOsmosisFilterReminderDao
+class FilterSetupTest {
+    private lateinit var filterSetupDao: FilterSetupDao
     private lateinit var db: ReverseOsmosisDatabase
 
 
@@ -35,7 +35,7 @@ class ReverseOsmosisFilterReminderTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(
             context, ReverseOsmosisDatabase::class.java).build()
-        reverseOsmosisFilterReminderDao = db.reverseOsmosisFilterReminderDao()
+        filterSetupDao = db.filterSetupDao()
     }
 
     @After
@@ -46,16 +46,16 @@ class ReverseOsmosisFilterReminderTest {
 
     @Test
     fun writeFilterSetupAndReadInList() = runBlocking {
-        val filterReminder = ReverseOsmosisFilterReminder(
-            0,
-            Date(),
-            "buynew"
+        val filterSetup = FilterSetup(
+            "test"
         )
-        reverseOsmosisFilterReminderDao.insert(filterReminder)
+        filterSetupDao.insert(filterSetup)
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            reverseOsmosisFilterReminderDao.getByFilter(0).collect {
-                assertThat(it).contains(filterReminder)
+            filterSetupDao.getAll().collect {
+                assertThat(
+                    it.map { filterSetupWithFilters -> filterSetupWithFilters.filterSetup }
+                ).contains(filterSetup)
                 latch.countDown()
             }
         }
@@ -65,26 +65,26 @@ class ReverseOsmosisFilterReminderTest {
 
     @Test
     fun updateFilterSetup() = runBlocking {
-        val filterReminder = ReverseOsmosisFilterReminder(
-            0,
-            Date(),
-            "buynew"
+        val filterSetup = FilterSetup(
+            "test"
         )
-        val modifiedFilterReminder = ReverseOsmosisFilterReminder(
-            0,
-            Date(Date().time + 4000),
-            "buynew"
+        val modifiedFilterSetup = FilterSetup(
+            "test2"
         )
 
-        modifiedFilterReminder.uid = reverseOsmosisFilterReminderDao.insert(filterReminder).first()
-        reverseOsmosisFilterReminderDao.update(modifiedFilterReminder)
+        modifiedFilterSetup.uid = filterSetupDao.insert(filterSetup).first()
+        filterSetupDao.update(modifiedFilterSetup)
 
 
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            reverseOsmosisFilterReminderDao.getByFilter(0).collect {
-                assertThat(it).doesNotContain(filterReminder)
-                assertThat(it).contains(modifiedFilterReminder)
+            filterSetupDao.getAll().collect {
+                assertThat(
+                    it.map { filterSetupWithFilters -> filterSetupWithFilters.filterSetup }
+                ).doesNotContain(filterSetup)
+                assertThat(
+                    it.map { filterSetupWithFilters -> filterSetupWithFilters.filterSetup }
+                ).contains(modifiedFilterSetup)
                 latch.countDown()
             }
         }
@@ -94,20 +94,20 @@ class ReverseOsmosisFilterReminderTest {
 
     @Test
     fun deleteFilterSetup() = runBlocking {
-        val filterReminder = ReverseOsmosisFilterReminder(
-            0,
-            Date(),
-            "buynew"
+        val filterSetup = FilterSetup(
+            "test"
         )
 
-        filterReminder.uid = reverseOsmosisFilterReminderDao.insert(filterReminder).first()
+        filterSetup.uid = filterSetupDao.insert(filterSetup).first()
 
-        reverseOsmosisFilterReminderDao.delete(filterReminder)
+        filterSetupDao.delete(filterSetup)
 
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            reverseOsmosisFilterReminderDao.getByFilter(0).collect {
-                assertThat(it).doesNotContain(filterReminder)
+            filterSetupDao.getAll().collect {
+                assertThat(
+                    it.map { filterSetupWithFilters -> filterSetupWithFilters.filterSetup }
+                ).doesNotContain(filterSetup)
                 latch.countDown()
             }
         }
