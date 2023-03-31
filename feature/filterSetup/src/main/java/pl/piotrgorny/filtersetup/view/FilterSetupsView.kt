@@ -10,10 +10,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.piotrgorny.filtersetup.contract.FilterSetupsContract
 import pl.piotrgorny.model.FilterSetup
+import pl.piotrgorny.ui.loader.Loader
 
 @Composable
 fun FilterSetupsView(
@@ -22,20 +22,21 @@ fun FilterSetupsView(
 ) {
     when {
         state.isLoading -> {
-            Column(modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                CircularProgressIndicator()
-                Text(text = "Loading filter setups")
-            }
-        } 
+            Loader("Loading filter setups")
+        }
         state.filterSetups.isEmpty() -> {
-            Column(modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "No filter setups available")
-                Button(modifier = Modifier, onClick = { onEventSent(FilterSetupsContract.Event.AddFilterSetup) }) {
-                    Text(text = "Add new")
+            Scaffold {
+                Column(
+                    modifier = Modifier.padding(it).fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "No filter setups available")
+                    Button(
+                        modifier = Modifier,
+                        onClick = { onEventSent(FilterSetupsContract.Event.AddFilterSetup) }) {
+                        Text(text = "Add new")
+                    }
                 }
             }
         }
@@ -51,14 +52,12 @@ fun FilterSetupsView(
                 },
                 floatingActionButtonPosition = FabPosition.End
             ) {
-                Column(modifier = Modifier.padding(it)) {
+                Column(modifier = Modifier.padding(it).fillMaxSize().padding(15.dp)) {
                     FilterSetupsList(filterSetups = state.filterSetups) { filterSetup ->
                         onEventSent(FilterSetupsContract.Event.FilterSetupSelection(filterSetup))
                     }
                 }
             }
-
-
         }
     }
 }

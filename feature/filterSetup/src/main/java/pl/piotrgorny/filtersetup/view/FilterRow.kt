@@ -20,7 +20,7 @@ import java.util.*
 
 @Composable
 fun FilterRow(filter: Filter, onFilterEditPress: (Filter) -> Unit = {}) {
-    Card(modifier = Modifier.fillMaxWidth(), backgroundColor = MaterialTheme.colors.surface, elevation = 10.dp) {
+    Card(modifier = Modifier.fillMaxWidth().padding(15.dp), elevation = 10.dp) {
         BoxWithConstraints {
             val constraints = filterRowDecoupledConstraints()
             ConstraintLayout(constraints,

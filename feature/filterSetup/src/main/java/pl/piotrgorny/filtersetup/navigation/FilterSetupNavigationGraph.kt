@@ -1,9 +1,7 @@
 package pl.piotrgorny.filtersetup.navigation
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import pl.piotrgorny.filtersetup.screen.AddFilterSetupScreen
 import pl.piotrgorny.filtersetup.screen.FilterSetupsScreen
 import pl.piotrgorny.filtersetup.view.AddFilterSetupView
@@ -17,7 +15,7 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
         composable(route = "filterSetups") {
             FilterSetupsScreen(
                 navigateToAddFilterSetup = { navController.navigate("addFilterSetup") },
-                navigateToFilterSetupDetails = { navController.navigate("filterSetupDetails") }
+                navigateToFilterSetupDetails = { navController.navigate("filterSetupDetails/${it.id}") }
             )
         }
         composable(route = "addFilterSetup") {
@@ -25,8 +23,15 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                 navController.popBackStack("filterSetups", false)
             }
         }
-        composable(route = "filterSetupDetails") {
-            FilterSetupDetailsView()
+        composable(
+            route = "filterSetupDetails/{filterSetupId}",
+            arguments = listOf(
+                navArgument("filterSetupId") { type = NavType.LongType }
+            )
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getLong("filterSetupId")?.let {
+                FilterSetupDetailsView(it)
+            }
         }
     }
 }

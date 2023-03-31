@@ -7,15 +7,16 @@ import androidx.compose.runtime.*
 @Composable
 fun <T> Dropdown(
     label: String = "Label",
-    options: List<DropDownItem<T>> = emptyList(),
-    defaultValue: String? = null,
+    options: List<T> = emptyList(),
+    optionToString: (T) -> String = { it.toString() },
+    defaultValue: T? = null,
     onSelectedOptionChange: (T) -> Unit = {}
-){
+) {
     var expanded by remember {
         mutableStateOf(false)
     }
     var selectedOptionText by remember {
-        mutableStateOf(defaultValue ?: options.getOrNull(0)?.title ?: "text")
+        mutableStateOf((options.firstOrNull { it == defaultValue } ?: options.getOrNull(0))?.let(optionToString) ?: "text")
     }
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
         expanded = !expanded
@@ -33,11 +34,11 @@ fun <T> Dropdown(
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach {
                 DropdownMenuItem(onClick = {
-                    selectedOptionText = it.title
-                    onSelectedOptionChange(it.item)
+                    selectedOptionText = optionToString(it)
+                    onSelectedOptionChange(it)
                     expanded = false
                 }) {
-                    Text(text = it.title)
+                    Text(text = optionToString(it))
                 }
             }
         }

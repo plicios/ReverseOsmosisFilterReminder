@@ -9,4 +9,7 @@ import pl.piotrgorny.database.relation.FilterSetupWithFilters
 interface FilterSetupDao : ReverseOsmosisDao<FilterSetup> {
     @Query("SELECT * FROM ${FilterSetup.TABLE_NAME}")
     fun getAll() : Flow<List<FilterSetupWithFilters>>
+
+    @Query("SELECT * FROM ${FilterSetup.TABLE_NAME} where uid = :uid")
+    fun get(uid: Long) : Flow<FilterSetupWithFilters?>
 }

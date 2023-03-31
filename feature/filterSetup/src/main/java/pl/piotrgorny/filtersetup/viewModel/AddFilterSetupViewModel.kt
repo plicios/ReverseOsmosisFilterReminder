@@ -30,6 +30,9 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
             is AddFilterSetupContract.Event.NameChange -> {
                 setState { copy(name = event.name) }
             }
+            is AddFilterSetupContract.Event.TypeChange -> {
+                setState { copy(type = event.type) }
+            }
             is AddFilterSetupContract.Event.AddFilter -> {
                 setState { copy(filters = filters + event.filter, isAddingFilter = false) }
             }
@@ -66,7 +69,7 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
 
     private fun AddFilterSetupContract.State.toFilterSetup() : FilterSetup? {
         if(this.name.isNotEmpty()){
-            return FilterSetup(this.name, this.filters)
+            return FilterSetup(this.name, this.type, this.filters)
         }
         return null
     }

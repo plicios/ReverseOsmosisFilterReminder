@@ -14,8 +14,14 @@ class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
 
     private val database: ReverseOsmosisDatabase = Room.databaseBuilder(context, ReverseOsmosisDatabase::class.java, "reverse-osmosis-db").build()
     override fun getFilterSetups(): Flow<List<FilterSetup>> {
-        return database.filterSetupDao().getAll().map {list ->
+        return database.filterSetupDao().getAll().map { list ->
             list.map { it.toModel() }
+        }
+    }
+
+    override fun getFilterSetup(id: Long): Flow<FilterSetup?> {
+        return database.filterSetupDao().get(id).map {
+            it?.toModel()
         }
     }
 
@@ -38,7 +44,9 @@ class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
 }
 
 fun FilterSetupWithFilters.toModel() = FilterSetup(
+    filterSetup.uid,
     filterSetup.name,
+    FilterSetup.Type.valueOf(filterSetup.type),
     filters.map { it.toModel() }
 )
 
@@ -49,7 +57,8 @@ fun Filter.toModel() = pl.piotrgorny.model.Filter(
 )
 
 fun FilterSetup.toEntity() = pl.piotrgorny.database.entity.FilterSetup(
-    name
+    name,
+    type.name
 )
 
 fun pl.piotrgorny.model.Filter.toEntity(setupId: Long) = Filter(

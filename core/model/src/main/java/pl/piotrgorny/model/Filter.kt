@@ -15,16 +15,73 @@ data class Filter(
 ) {
     fun getExpirationDate() : Date = (LocalDate(installationDate) + lifeSpan.period).toDate()
 
-    enum class Type {
-        SedimentPS_20,
-        SedimentPS_10,
-        SedimentPS_5,
-        SedimentPS_1,
-        Carbon,
-        SemiPermeableMembrane,
-        InlineCarbon,
-        Mineralizing,
-        BioCeramic
+    sealed class Type {
+        sealed class Sediment(val micronValue: Int) : Type() {
+            object SedimentPS_20 : Sediment(20)
+            object SedimentPS_10 : Sediment(10)
+            object SedimentPS_5 : Sediment(5)
+            object SedimentPS_1 : Sediment(1)
+
+            override val name: String
+                get() = "Sediment:$micronValue"
+        }
+        object Carbon : Type() {
+            override val name: String
+                get() = "BioCeramic"
+        }
+        object SemiPermeableMembrane : Type() {
+            override val name: String
+                get() = "BioCeramic"
+        }
+        object InlineCarbon : Type() {
+            override val name: String
+                get() = "InlineCarbon"
+        }
+        object Mineralizing : Type() {
+            override val name: String
+                get() = "Mineralizing"
+        }
+        object BioCeramic : Type() {
+            override val name: String
+                get() = "BioCeramic"
+        }
+
+        object Ionizing : Type() {
+            override val name: String
+                get() = "Ionizing"
+        }
+
+        abstract val name: String
+
+        companion object {
+            fun valueOf(value: String) : Type =
+                when(value) {
+                    BioCeramic.name -> BioCeramic
+                    Carbon.name -> Carbon
+                    InlineCarbon.name -> InlineCarbon
+                    Ionizing.name -> Ionizing
+                    Mineralizing.name -> Mineralizing
+                    Sediment.SedimentPS_1.name -> Sediment.SedimentPS_1
+                    Sediment.SedimentPS_10.name -> Sediment.SedimentPS_10
+                    Sediment.SedimentPS_20.name -> Sediment.SedimentPS_20
+                    Sediment.SedimentPS_5.name -> Sediment.SedimentPS_5
+                    SemiPermeableMembrane.name -> SemiPermeableMembrane
+                    else -> throw IllegalArgumentException("Not supported filter type: $value")
+                }
+
+            fun values() : List<Type> = listOf(
+                Sediment.SedimentPS_20,
+                Sediment.SedimentPS_10,
+                Sediment.SedimentPS_5,
+                Sediment.SedimentPS_1,
+                Carbon,
+                SemiPermeableMembrane,
+                InlineCarbon,
+                Mineralizing,
+                BioCeramic,
+                Ionizing
+            )
+        }
     }
 
     enum class LifeSpan(val period: ReadablePeriod) {
