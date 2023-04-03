@@ -11,7 +11,6 @@ import pl.piotrgorny.filtersetup.viewModel.ModifyFilterViewModel
 import pl.piotrgorny.model.Filter
 import pl.piotrgorny.ui.date.DateField
 import pl.piotrgorny.ui.dialog.Dialog
-import pl.piotrgorny.ui.dropdown.DropDownItem
 import pl.piotrgorny.ui.dropdown.Dropdown
 
 
@@ -45,8 +44,9 @@ fun ModifyFilterDialog(
     ) {
         Dropdown(
             label = "Type",
-            defaultValue = state.type?.name ?: "",
-            options = Filter.Type.values().map { DropDownItem(it.print(), it) },
+            defaultValue = state.type,
+            options = Filter.Type.values(),
+            optionToString = Filter.Type::print,
             onSelectedOptionChange = {
                 viewModel.handleEvents(ModifyFilterContract.Event.TypeChange(it))
             }
@@ -60,8 +60,9 @@ fun ModifyFilterDialog(
         )
         Dropdown(
             label = "Lifespan",
-            defaultValue = state.lifeSpan?.name ?: "",
-            options = Filter.LifeSpan.values().map { DropDownItem(it.print(), it) },
+            defaultValue = state.lifeSpan,
+            options = Filter.LifeSpan.values().toList(),
+            optionToString = Filter.LifeSpan::print,
             onSelectedOptionChange = {
                 viewModel.handleEvents(ModifyFilterContract.Event.LifeSpanChange(it))
             }
