@@ -44,7 +44,6 @@ fun AddFilterSetupView(
                 onSelectedOptionChange = {
                     onEventSent(AddFilterSetupContract.Event.TypeChange(it))
                 }
-
             )
             Row(modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically) {

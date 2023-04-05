@@ -72,8 +72,8 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
         }
     }
 
-    private fun addMissingFilters(missingFilterTypes: List<Class<out Filter.Type>>) {
-        //setState { copy(filters = filters + missingFilterTypes.map { Filter(it.newInstance()) }) }
+    private fun addMissingFilters(missingFilterTypes: List<Filter.Type>) {
+        setState { copy(filters = filters + missingFilterTypes.map { Filter(it) }) }
     }
 
     private fun removeObsoleteFilters(obsoleteFilters: List<Filter>) {

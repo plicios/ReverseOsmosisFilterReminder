@@ -5,10 +5,7 @@ import pl.piotrgorny.model.Filter
 
 fun Filter.Type.print() : String { //TODO to be changed to string res
     return when(this){
-        Filter.Type.Sediment.SedimentPS_20 -> "Sediment Filter 20 micron"
-        Filter.Type.Sediment.SedimentPS_10 -> "Sediment Filter 10 micron"
-        Filter.Type.Sediment.SedimentPS_5 -> "Sediment Filter 5 micron"
-        Filter.Type.Sediment.SedimentPS_1 -> "Sediment Filter 1 micron"
+        is Filter.Type.Sediment -> "Sediment Filter ${this.micronValue} micron"
         Filter.Type.Carbon -> "Carbon filter"
         Filter.Type.SemiPermeableMembrane -> "Semipermeable membrane"
         Filter.Type.InlineCarbon -> "Activated carbon post filter"

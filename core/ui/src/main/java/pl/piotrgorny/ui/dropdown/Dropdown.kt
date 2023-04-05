@@ -1,7 +1,9 @@
 package pl.piotrgorny.ui.dropdown
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -22,6 +24,7 @@ fun <T> Dropdown(
         expanded = !expanded
     }) {
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             readOnly = true,
             value = selectedOptionText,
             onValueChange = {},

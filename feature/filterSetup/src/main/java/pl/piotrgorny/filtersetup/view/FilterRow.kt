@@ -25,7 +25,7 @@ fun FilterRow(filter: Filter, onFilterEditPress: (Filter) -> Unit = {}) {
         BoxWithConstraints {
             val constraints = filterRowDecoupledConstraints()
             ConstraintLayout(constraints,
-                modifier = Modifier.padding(start = 15.dp, bottom = 15.dp)) {
+                modifier = Modifier.padding(start = 15.dp, bottom = 15.dp).fillMaxWidth()) {
 
                 Text(text = "Type:", modifier = Modifier.layoutId("typeLabel"))
                 Text(text = "Installation date:", modifier = Modifier.layoutId("installationDateLabel"))

@@ -26,11 +26,10 @@ data class Filter(
             object SedimentPS_5 : Sediment(5)
             object SedimentPS_1 : Sediment(1)
 
+            object Any : Sediment(-1)
+
             override val name: String
                 get() = "Sediment:$micronValue"
-
-            override val typeClass: Class<out Type>
-                get() = Sediment::class.java
         }
         object Carbon : Type() {
             override val name: String
@@ -59,8 +58,6 @@ data class Filter(
         }
 
         abstract val name: String
-
-        open val typeClass: Class<out Type> = javaClass
 
         companion object {
             fun valueOf(value: String) : Type =

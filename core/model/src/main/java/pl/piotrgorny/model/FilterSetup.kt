@@ -16,8 +16,8 @@ data class FilterSetup(
         "", type, filters
     )
 
-    val missingFilterTypes: List<Class<out Filter.Type>>
-        get() = type.filterTypes.remove(filters.map { it.type.typeClass })
+    val missingFilterTypes: List<Filter.Type>
+        get() = type.filterTypes.remove(filters.map { it.type })
 
     val obsoleteFilters: List<Filter>
         get() = when(type) {
@@ -26,8 +26,8 @@ data class FilterSetup(
                 val obsoleteFilters = mutableListOf<Filter>()
                 val filterTypes = type.filterTypes.toMutableList()
                 filters.forEach {
-                    if(filterTypes.contains(it.type.typeClass)){
-                        filterTypes.remove(it.type.typeClass)
+                    if(filterTypes.contains(it.type)){
+                        filterTypes.remove(it.type)
                     } else {
                         obsoleteFilters.add(it)
                     }
@@ -38,56 +38,56 @@ data class FilterSetup(
 
     sealed class Type {
         open class RO4 : Type() {
-            override val filterTypes: List<Class<out Filter.Type>>
-                get() = listOf(Filter.Type.Sediment::class.java, Filter.Type.Carbon::class.java, Filter.Type.Sediment::class.java, Filter.Type.SemiPermeableMembrane::class.java)
+            override val filterTypes: List<Filter.Type>
+                get() = listOf(Filter.Type.Sediment.Any, Filter.Type.Carbon, Filter.Type.Sediment.Any, Filter.Type.SemiPermeableMembrane)
             override val name: String
                 get() = "RO4"
         }
         open class RO5 : RO4() {
-            override val filterTypes: List<Class<out Filter.Type>>
-                get() = super.filterTypes + Filter.Type.InlineCarbon::class.java
+            override val filterTypes: List<Filter.Type>
+                get() = super.filterTypes + Filter.Type.InlineCarbon
             override val name: String
                 get() = "RO5"
         }
         open class RO6 : RO5() {
-            override val filterTypes: List<Class<out Filter.Type>>
-                get() = super.filterTypes + Filter.Type.Mineralizing::class.java
+            override val filterTypes: List<Filter.Type>
+                get() = super.filterTypes + Filter.Type.Mineralizing
             override val name: String
                 get() = "RO6"
         }
         open class RO7 : RO6() {
-            override val filterTypes: List<Class<out Filter.Type>>
-                get() = super.filterTypes + Filter.Type.BioCeramic::class.java
+            override val filterTypes: List<Filter.Type>
+                get() = super.filterTypes + Filter.Type.BioCeramic
             override val name: String
                 get() = "RO7"
         }
         open class RO8 : RO7() {
-            override val filterTypes: List<Class<out Filter.Type>>
-                get() = super.filterTypes + Filter.Type.Ionizing::class.java
+            override val filterTypes: List<Filter.Type>
+                get() = super.filterTypes + Filter.Type.Ionizing
             override val name: String
                 get() = "RO8"
         }
         object RO9 : RO8() {
-            override val filterTypes: List<Class<out Filter.Type>>
-                get() = super.filterTypes + Filter.Type.InlineCarbon::class.java
+            override val filterTypes: List<Filter.Type>
+                get() = super.filterTypes + Filter.Type.InlineCarbon
             override val name: String
                 get() = "RO9"
         }
 
         object Aquarius : Type() {
-            override val filterTypes: List<Class<out Filter.Type>>
-                get() = listOf(Filter.Type.Sediment::class.java, Filter.Type.Carbon::class.java, Filter.Type.SemiPermeableMembrane::class.java)
+            override val filterTypes: List<Filter.Type>
+                get() = listOf(Filter.Type.Sediment.Any, Filter.Type.Carbon, Filter.Type.SemiPermeableMembrane)
             override val name: String
                 get() = "Aquarius"
         }
         object Custom : Type() {
-            override val filterTypes: List<Class<out Filter.Type>>
+            override val filterTypes: List<Filter.Type>
                 get() = emptyList()
             override val name: String
                 get() = "Custom"
         }
 
-        abstract val filterTypes: List<Class<out Filter.Type>>
+        abstract val filterTypes: List<Filter.Type>
         abstract val name: String
 
         companion object {
