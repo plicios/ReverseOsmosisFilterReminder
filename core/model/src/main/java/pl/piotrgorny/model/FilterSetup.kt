@@ -1,5 +1,7 @@
 package pl.piotrgorny.model
 
+import pl.piotrgorny.common.remove
+
 data class FilterSetup(
     val id: Long,
     val name: String,
@@ -9,6 +11,30 @@ data class FilterSetup(
     constructor(name: String, type: Type, filters: List<Filter>) : this(
         -1, name, type, filters
     )
+
+    constructor(type: Type, filters: List<Filter>) : this(
+        "", type, filters
+    )
+
+    val missingFilterTypes: List<Class<out Filter.Type>>
+        get() = type.filterTypes.remove(filters.map { it.type.typeClass })
+
+    val obsoleteFilters: List<Filter>
+        get() = when(type) {
+            Type.Custom -> emptyList()
+            else -> {
+                val obsoleteFilters = mutableListOf<Filter>()
+                val filterTypes = type.filterTypes.toMutableList()
+                filters.forEach {
+                    if(filterTypes.contains(it.type.typeClass)){
+                        filterTypes.remove(it.type.typeClass)
+                    } else {
+                        obsoleteFilters.add(it)
+                    }
+                }
+                obsoleteFilters
+            }
+        }
 
     sealed class Type {
         open class RO4 : Type() {

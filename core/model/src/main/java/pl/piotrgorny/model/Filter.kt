@@ -10,9 +10,13 @@ import java.util.*
 
 data class Filter(
     val type: Type,
-    val installationDate: Date,
+    val installationDate: LocalDate,
     val lifeSpan: LifeSpan
 ) {
+    constructor(type: Type) : this(
+        type, LocalDate(), LifeSpan.One_Day
+    )
+
     fun getExpirationDate() : Date = (LocalDate(installationDate) + lifeSpan.period).toDate()
 
     sealed class Type {
@@ -24,6 +28,9 @@ data class Filter(
 
             override val name: String
                 get() = "Sediment:$micronValue"
+
+            override val typeClass: Class<out Type>
+                get() = Sediment::class.java
         }
         object Carbon : Type() {
             override val name: String
@@ -53,6 +60,8 @@ data class Filter(
 
         abstract val name: String
 
+        open val typeClass: Class<out Type> = javaClass
+
         companion object {
             fun valueOf(value: String) : Type =
                 when(value) {
@@ -81,6 +90,21 @@ data class Filter(
                 BioCeramic,
                 Ionizing
             )
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Type
+
+            if (name != other.name) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return name.hashCode()
         }
     }
 

@@ -5,11 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import pl.piotrgorny.common.remove
 import pl.piotrgorny.data.FilterSetupRepository
 import pl.piotrgorny.data.database.DatabaseFilterSetupRepository
 import pl.piotrgorny.filtersetup.contract.AddFilterSetupContract
+import pl.piotrgorny.model.Filter
 import pl.piotrgorny.model.FilterSetup
 import pl.piotrgorny.mvi.MviBaseViewModel
+import java.util.*
 
 class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : MviBaseViewModel<
         AddFilterSetupContract.Event,
@@ -32,6 +35,7 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
             }
             is AddFilterSetupContract.Event.TypeChange -> {
                 setState { copy(type = event.type) }
+                onTypeChange(event.type)
             }
             is AddFilterSetupContract.Event.AddFilter -> {
                 setState { copy(filters = filters + event.filter, isAddingFilter = false) }
@@ -55,6 +59,25 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
                 setState { copy(filters = filters - event.filter, filterBeingModified = null) }
             }
         }
+    }
+
+    private fun onTypeChange(newType: FilterSetup.Type) {
+        when(newType) {
+            FilterSetup.Type.Custom -> {}
+            else -> {
+                val filterSetup = FilterSetup(newType, viewState.value.filters)
+                addMissingFilters(filterSetup.missingFilterTypes)
+                removeObsoleteFilters(filterSetup.obsoleteFilters)
+            }
+        }
+    }
+
+    private fun addMissingFilters(missingFilterTypes: List<Class<out Filter.Type>>) {
+        //setState { copy(filters = filters + missingFilterTypes.map { Filter(it.newInstance()) }) }
+    }
+
+    private fun removeObsoleteFilters(obsoleteFilters: List<Filter>) {
+        setState { copy(filters = filters.remove(obsoleteFilters)) }
     }
 
     private fun validateInput() = true

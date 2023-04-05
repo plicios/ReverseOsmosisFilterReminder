@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import org.joda.time.LocalDate
 import pl.piotrgorny.filtersetup.extensions.print
 import pl.piotrgorny.model.Filter
 import java.util.*
@@ -101,5 +102,5 @@ private fun filterRowDecoupledConstraints() = ConstraintSet {
 @Preview
 @Composable
 fun FilterRowPreview(){
-    FilterRow(filter = Filter(Filter.Type.InlineCarbon, Date(), Filter.LifeSpan.One_Day))
+    FilterRow(filter = Filter(Filter.Type.InlineCarbon, LocalDate(), Filter.LifeSpan.One_Day))
 }

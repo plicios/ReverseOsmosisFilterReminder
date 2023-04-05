@@ -1,17 +1,13 @@
 package pl.piotrgorny.database.converter
 
 import androidx.room.TypeConverter
-import java.util.*
+import org.joda.time.LocalDate
+
 
 class DateConverter {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
+    fun fromTimestamp(value: Long?): LocalDate? = value?.let { LocalDate(it) }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
-    }
-
+    fun dateToTimestamp(date: LocalDate?): Long? = date?.toDate()?.time
 }

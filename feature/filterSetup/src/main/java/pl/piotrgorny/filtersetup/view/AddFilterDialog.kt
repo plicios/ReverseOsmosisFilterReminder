@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import org.joda.time.LocalDate
 import pl.piotrgorny.filtersetup.contract.AddFilterContract
 import pl.piotrgorny.filtersetup.extensions.print
 import pl.piotrgorny.filtersetup.viewModel.AddFilterViewModel
@@ -46,9 +47,9 @@ fun AddFilterDialog(onDismiss: () -> Unit, onFilterAdded: (Filter) -> Unit) {
         )
         DateField(
             label = "Installation date",
-            initialDate = state.installationDate,
+            initialDate = state.installationDate.toDate(),
             onDateChange = {
-                viewModel.handleEvents(AddFilterContract.Event.InstallationDateChange(it))
+                viewModel.handleEvents(AddFilterContract.Event.InstallationDateChange(LocalDate(it)))
             }
         )
         Dropdown(

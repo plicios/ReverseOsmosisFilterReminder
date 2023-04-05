@@ -4,13 +4,13 @@ import pl.piotrgorny.model.Filter
 import pl.piotrgorny.mvi.ViewEvent
 import pl.piotrgorny.mvi.ViewSideEffect
 import pl.piotrgorny.mvi.ViewState
-import java.util.Date
+import org.joda.time.LocalDate
 
 class ModifyFilterContract {
     sealed class Event : ViewEvent {
         data class TypeChange(val type: Filter.Type) : Event()
         data class LifeSpanChange(val lifeSpan: Filter.LifeSpan) : Event()
-        data class InstallationDateChange(val installationDate: Date) : Event()
+        data class InstallationDateChange(val installationDate: LocalDate) : Event()
         object ModifyFilter: Event()
         object RemoveFilter: Event()
     }
@@ -18,7 +18,7 @@ class ModifyFilterContract {
         val modifiedFilter: Filter,
         val type: Filter.Type,
         val lifeSpan: Filter.LifeSpan,
-        val installationDate: Date
+        val installationDate: LocalDate
     ) : ViewState {
         constructor(modifiedFilter: Filter) :
                 this(modifiedFilter,

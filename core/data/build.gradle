@@ -36,4 +36,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_version"
     implementation "androidx.room:room-runtime:$room_version"
+
+    implementation "joda-time:joda-time:$joda_time_version"
 }

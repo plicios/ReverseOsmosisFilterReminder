@@ -2,12 +2,12 @@ package pl.piotrgorny.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
+import org.joda.time.DateTime
 
 @Entity(tableName = FilterReminder.TABLE_NAME)
 data class FilterReminder(
     val filterId: Long, //ForeignKey
-    val alarmDate: Date,
+    val alarmDate: DateTime,
     val type: String
 ) {
     @PrimaryKey(autoGenerate = true)

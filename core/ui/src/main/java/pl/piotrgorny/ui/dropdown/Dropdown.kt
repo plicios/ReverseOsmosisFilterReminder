@@ -16,7 +16,7 @@ fun <T> Dropdown(
         mutableStateOf(false)
     }
     var selectedOptionText by remember {
-        mutableStateOf((options.firstOrNull { it == defaultValue } ?: options.getOrNull(0))?.let(optionToString) ?: "text")
+        mutableStateOf(options.firstOrNull { it == defaultValue }?.let(optionToString) ?: "")
     }
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
         expanded = !expanded
