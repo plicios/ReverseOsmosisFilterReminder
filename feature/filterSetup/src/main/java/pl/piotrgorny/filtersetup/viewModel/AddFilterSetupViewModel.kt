@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import pl.piotrgorny.common.remove
+import pl.piotrgorny.common.replaceFirst
 import pl.piotrgorny.data.FilterSetupRepository
 import pl.piotrgorny.data.database.DatabaseFilterSetupRepository
 import pl.piotrgorny.filtersetup.contract.AddFilterSetupContract
@@ -38,25 +39,19 @@ class AddFilterSetupViewModel(private val repository: FilterSetupRepository) : M
                 onTypeChange(event.type)
             }
             is AddFilterSetupContract.Event.AddFilter -> {
-                setState { copy(filters = filters + event.filter, isAddingFilter = false) }
+                setState { copy(filters = filters + event.filter) }
             }
             is AddFilterSetupContract.Event.RequestAddFilter -> {
-                setState { copy(isAddingFilter = true) }
-            }
-            is AddFilterSetupContract.Event.DismissAddFilter -> {
-                setState { copy(isAddingFilter = false) }
+                setEffect { AddFilterSetupContract.Effect.Navigation.OpenAddOrModifyFilterDialog() }
             }
             is AddFilterSetupContract.Event.RequestModifyFilter -> {
-                setState { copy(filterBeingModified = event.filter) }
-            }
-            is AddFilterSetupContract.Event.DismissModifyFilter -> {
-                setState { copy(filterBeingModified = null) }
+                setEffect { AddFilterSetupContract.Effect.Navigation.OpenAddOrModifyFilterDialog(event.filter) }
             }
             is AddFilterSetupContract.Event.ModifyFilter -> {
-                setState { copy(filters = filters - event.oldFilter + event.newFilter, filterBeingModified = null) }
+                setState { copy(filters = filters.replaceFirst(event.newFilter) { it == event.oldFilter }) } //TODO think of different replacing with original index in mind
             }
             is AddFilterSetupContract.Event.RemoveFilter -> {
-                setState { copy(filters = filters - event.filter, filterBeingModified = null) }
+                setState { copy(filters = filters - event.filter) }
             }
         }
     }

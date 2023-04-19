@@ -1,25 +1,29 @@
 package pl.piotrgorny.model
 
-import org.joda.time.Days
-import org.joda.time.LocalDate
-import org.joda.time.Months
-import org.joda.time.ReadablePeriod
-import org.joda.time.Weeks
-import org.joda.time.Years
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import org.joda.time.*
 import java.util.*
 
+@Parcelize
 data class Filter(
+    val id: Long,
     val type: Type,
     val installationDate: LocalDate,
     val lifeSpan: LifeSpan
-) {
+) : Parcelable {
+    constructor(type: Type, installationDate: LocalDate, lifeSpan: LifeSpan) : this(
+        -1, type, installationDate, lifeSpan
+    )
     constructor(type: Type) : this(
         type, LocalDate(), LifeSpan.One_Day
     )
 
     fun getExpirationDate() : Date = (LocalDate(installationDate) + lifeSpan.period).toDate()
 
-    sealed class Type {
+    @Parcelize
+    sealed class Type : Parcelable {
+        @Parcelize
         sealed class Sediment(val micronValue: Int) : Type() {
             object SedimentPS_20 : Sediment(20)
             object SedimentPS_10 : Sediment(10)
@@ -33,11 +37,11 @@ data class Filter(
         }
         object Carbon : Type() {
             override val name: String
-                get() = "BioCeramic"
+                get() = "Carbon"
         }
         object SemiPermeableMembrane : Type() {
             override val name: String
-                get() = "BioCeramic"
+                get() = "SemiPermeableMembrane"
         }
         object InlineCarbon : Type() {
             override val name: String
@@ -71,6 +75,7 @@ data class Filter(
                     Sediment.SedimentPS_10.name -> Sediment.SedimentPS_10
                     Sediment.SedimentPS_20.name -> Sediment.SedimentPS_20
                     Sediment.SedimentPS_5.name -> Sediment.SedimentPS_5
+                    Sediment.Any.name -> Sediment.Any
                     SemiPermeableMembrane.name -> SemiPermeableMembrane
                     else -> throw IllegalArgumentException("Not supported filter type: $value")
                 }

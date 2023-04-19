@@ -12,9 +12,7 @@ class AddFilterSetupContract {
         data class NameChange(val name: String) : Event()
         data class TypeChange(val type: FilterSetup.Type) : Event()
         object RequestAddFilter : Event()
-        object DismissAddFilter : Event()
         data class RequestModifyFilter(val filter: Filter) : Event()
-        object DismissModifyFilter : Event()
         data class AddFilter(val filter: Filter) : Event()
         data class ModifyFilter(val oldFilter: Filter, val newFilter: Filter) : Event()
         data class RemoveFilter(val filter: Filter) : Event()
@@ -24,14 +22,13 @@ class AddFilterSetupContract {
         val name: String = "",
         val type: FilterSetup.Type = FilterSetup.Type.Custom,
         val filters: List<Filter> = emptyList(),
-        val isAddingFilter: Boolean = false,
-        val filterBeingModified: Filter? = null,
         val isLoading: Boolean = false) : ViewState
 
     sealed class Effect : ViewSideEffect {
         object ToastDataWasLoaded : Effect()
         sealed class Navigation : Effect() {
             object BackToFilterSetups : Navigation()
+            data class OpenAddOrModifyFilterDialog(val oldFilter: Filter? = null) : Navigation()
         }
     }
 }

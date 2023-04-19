@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import pl.piotrgorny.filtersetup.contract.AddFilterContract
 import pl.piotrgorny.filtersetup.contract.AddFilterSetupContract
 import pl.piotrgorny.model.FilterSetup
 import pl.piotrgorny.ui.dropdown.Dropdown
@@ -64,24 +63,6 @@ fun AddFilterSetupView(
             }
             Button(onClick = { onEventSent(AddFilterSetupContract.Event.AddFilterSetup) }) {
                 Text(text = "Add filter setup")
-            }
-            if(state.isAddingFilter){
-                AddFilterDialog(
-                    onDismiss = {
-                        onEventSent(AddFilterSetupContract.Event.DismissAddFilter)
-                    },
-                    onFilterAdded = {
-                        onEventSent(AddFilterSetupContract.Event.AddFilter(it))
-                    }
-                )
-            }
-            state.filterBeingModified?.let {
-                ModifyFilterDialog(
-                    filter = it,
-                    onDismiss = { onEventSent(AddFilterSetupContract.Event.DismissModifyFilter) },
-                    onFilterRemoved = { filter -> onEventSent(AddFilterSetupContract.Event.RemoveFilter(filter)) },
-                    onFilterModified = { newFilter, oldFilter -> onEventSent(AddFilterSetupContract.Event.ModifyFilter(oldFilter, newFilter))}
-                )
             }
         }
     }
