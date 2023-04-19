@@ -20,7 +20,7 @@ fun FilterSetupsScreen(
         LocalContext.current))
     val state = viewModel.viewState.value
 
-    LaunchedEffect("key") {//TODO add key
+    LaunchedEffect(viewModel) {
         viewModel.effect.onEach { effect ->
             when (effect) {
                 is FilterSetupsContract.Effect.ToastDataWasLoaded -> {  }
