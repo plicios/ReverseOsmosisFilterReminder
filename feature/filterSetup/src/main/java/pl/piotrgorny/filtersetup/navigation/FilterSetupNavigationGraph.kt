@@ -51,7 +51,7 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
             )
         }
         composable(
-            route = "filterSetupDetails/filterSetupId}",
+            route = "filterSetupDetails/{filterSetupId}",
             arguments = listOf(
                 navArgument("filterSetupId") { type = NavType.LongType }
             )

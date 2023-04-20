@@ -6,8 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import pl.piotrgorny.data.FilterSetupRepository
 import pl.piotrgorny.database.ReverseOsmosisDatabase
-import pl.piotrgorny.database.entity.Filter
+import pl.piotrgorny.database.entity.Filter as FilterEntity
+import pl.piotrgorny.database.entity.FilterSetup as FilterSetupEntity
 import pl.piotrgorny.database.relation.FilterSetupWithFilters
+import pl.piotrgorny.model.Filter
 import pl.piotrgorny.model.FilterSetup
 
 class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
@@ -50,18 +52,18 @@ fun FilterSetupWithFilters.toModel() = FilterSetup(
     filters.map { it.toModel() }
 )
 
-fun Filter.toModel() = pl.piotrgorny.model.Filter(
-    pl.piotrgorny.model.Filter.Type.valueOf(type),
+fun FilterEntity.toModel() = Filter(
+    Filter.Type.valueOf(type),
     installationDate,
-    pl.piotrgorny.model.Filter.LifeSpan.valueOf(lifeSpan)
+    Filter.LifeSpan.valueOf(lifeSpan)
 )
 
-fun FilterSetup.toEntity() = pl.piotrgorny.database.entity.FilterSetup(
+fun FilterSetup.toEntity() = FilterSetupEntity(
     name,
     type.name
 )
 
-fun pl.piotrgorny.model.Filter.toEntity(setupId: Long) = Filter(
+fun Filter.toEntity(setupId: Long) = FilterEntity(
     setupId,
     type.name,
     lifeSpan.name,
