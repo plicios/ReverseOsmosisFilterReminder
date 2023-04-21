@@ -32,6 +32,15 @@ class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
         database.filterDao().insert(*filterSetup.filters.map { it.toEntity(id) }.toTypedArray())
     }
 
+    override suspend fun updateFilterSetup(filterSetup: FilterSetup) {
+        database.filterSetupDao().update(filterSetup.toEntity())
+
+
+        throw NotImplementedError()
+        //TODO update only changed filters
+        database.filterDao().insert(*filterSetup.filters.map { it.toEntity(filterSetup.id) }.toTypedArray())
+    }
+
     companion object {
         private var _instance: DatabaseFilterSetupRepository? = null
         fun instance(context: Context) : DatabaseFilterSetupRepository {

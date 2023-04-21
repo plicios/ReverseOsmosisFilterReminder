@@ -6,14 +6,13 @@ import pl.piotrgorny.ui.dialog.Dialog
 
 @Composable
 fun RemoveFilterDialog(
-    filter: Filter,
     onDismiss: () -> Unit,
-    onRemove: (Filter) -> Unit
+    onRemove: () -> Unit
 ) {
     Dialog(
         title = "Sure to remove filter?",
         confirmButtonTitle = "Remove",
         onDismiss = onDismiss,
-        onConfirm = { onRemove(filter) }
+        onConfirm = { onRemove() }
     )
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,7 +21,12 @@ import pl.piotrgorny.model.Filter
 import java.util.*
 
 @Composable
-fun FilterRow(filter: Filter, onFilterEditPress: (Filter) -> Unit = {}) {
+fun FilterRow(
+    filter: Filter,
+    readOnly: Boolean = false,
+    onFilterEditPress: (Filter) -> Unit = {},
+    onFilterRemovePress: (Filter) -> Unit = {}
+) {
     Card(modifier = Modifier.fillMaxWidth().padding(15.dp), elevation = 10.dp) {
         BoxWithConstraints {
             val constraints = filterRowDecoupledConstraints()
@@ -37,11 +43,23 @@ fun FilterRow(filter: Filter, onFilterEditPress: (Filter) -> Unit = {}) {
                 Text(text = filter.getExpirationDate().print(), modifier = Modifier.layoutId("expirationDate"))
                 Text(text = filter.lifeSpan.print(), modifier = Modifier.layoutId("lifeSpan"))
 
-                IconButton(modifier = Modifier.layoutId("edit"), onClick = { onFilterEditPress(filter) }) {
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        contentDescription = "edit filter"
-                    )
+                if(!readOnly) {
+                    IconButton(
+                        modifier = Modifier.layoutId("edit"),
+                        onClick = { onFilterEditPress(filter) }) {
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "edit filter"
+                        )
+                    }
+                    IconButton(
+                        modifier = Modifier.layoutId("remove"),
+                        onClick = { onFilterRemovePress(filter) }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "remove filter"
+                        )
+                    }
                 }
             }
         }
@@ -58,6 +76,7 @@ private fun filterRowDecoupledConstraints() = ConstraintSet {
     val lifeSpanLabel = createRefFor("lifeSpanLabel")
     val lifeSpan = createRefFor("lifeSpan")
     val edit = createRefFor("edit")
+    val remove = createRefFor("remove")
 
     val labelEndBarrier = createEndBarrier(typeLabel, installationDateLabel, expirationDateLabel, lifeSpanLabel)
 
@@ -95,6 +114,10 @@ private fun filterRowDecoupledConstraints() = ConstraintSet {
 
     constrain(edit){
         top.linkTo(parent.top)
+        end.linkTo(parent.end)
+    }
+    constrain(remove){
+        bottom.linkTo(parent.bottom)
         end.linkTo(parent.end)
     }
 }

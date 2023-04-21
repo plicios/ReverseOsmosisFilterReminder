@@ -1,6 +1,8 @@
 package pl.piotrgorny.data.mock
 
 import kotlinx.coroutines.flow.*
+import pl.piotrgorny.common.replace
+import pl.piotrgorny.common.replaceFirst
 import pl.piotrgorny.data.FilterRepository
 import pl.piotrgorny.data.FilterSetupRepository
 import pl.piotrgorny.model.Filter
@@ -19,7 +21,13 @@ object InMemoryFilterSetupRepository : FilterSetupRepository, FilterRepository {
     }
 
     override suspend fun addFilterSetup(filterSetup: FilterSetup) {
-        inMemoryList.value += filterSetup
+        inMemoryList.value += filterSetup.copy(id = inMemoryList.value.size.toLong())
+    }
+
+    override suspend fun updateFilterSetup(filterSetup: FilterSetup) {
+        inMemoryList.value = inMemoryList.value.replace(filterSetup) {
+            it.id == filterSetup.id
+        }
     }
 
     override fun getFilter(filterId: Long): Flow<Filter?> {
