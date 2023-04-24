@@ -42,8 +42,15 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
                     //TODO add error handling
                 }
             }
+            is AddOrModifyFilterSetupContract.Event.RemoveFilterSetup -> {
+                deleteFilterSetup()
+                setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.BackToFilterSetups }
+            }
             is AddOrModifyFilterSetupContract.Event.RequestModifyFilterSetup -> {
                 setState { copy(stateType =  AddOrModifyFilterSetupContract.State.Type.Modify) }
+            }
+            is AddOrModifyFilterSetupContract.Event.RequestRemoveFilterSetup -> {
+                filterSetupId?.let { setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.OpenRemoveFilterSetupDialog(it) } }
             }
             is AddOrModifyFilterSetupContract.Event.NameChange -> {
                 setState { copy(name = event.name) }
@@ -110,6 +117,14 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
                     repository.updateFilterSetup(it.copy(id = filterSetupId))
                 else
                     repository.addFilterSetup(it)
+            }
+        }
+    }
+
+    private fun deleteFilterSetup(){
+        filterSetupId?.let {
+            viewModelScope.launch {
+                repository.deleteFilterSetup(it)
             }
         }
     }

@@ -2,6 +2,7 @@ package pl.piotrgorny.database.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import pl.piotrgorny.database.entity.Filter
 import pl.piotrgorny.database.entity.FilterSetup
 import pl.piotrgorny.database.relation.FilterSetupWithFilters
 
@@ -12,4 +13,7 @@ interface FilterSetupDao : ReverseOsmosisDao<FilterSetup> {
 
     @Query("SELECT * FROM ${FilterSetup.TABLE_NAME} where uid = :uid")
     fun get(uid: Long) : Flow<FilterSetupWithFilters?>
+
+    @Query("DELETE FROM ${FilterSetup.TABLE_NAME} WHERE uid = :uid")
+    suspend fun delete(uid: Long)
 }

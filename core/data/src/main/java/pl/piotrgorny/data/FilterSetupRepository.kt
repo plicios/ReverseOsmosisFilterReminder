@@ -8,4 +8,5 @@ interface FilterSetupRepository {
     fun getFilterSetup(id: Long): Flow<FilterSetup?>
     suspend fun addFilterSetup(filterSetup: FilterSetup)
     suspend fun updateFilterSetup(filterSetup: FilterSetup)
+    suspend fun deleteFilterSetup(filterSetupId: Long)
 }

@@ -15,8 +15,10 @@ import pl.piotrgorny.filtersetup.screen.AddOrModifyFilterSetupScreen
 import pl.piotrgorny.filtersetup.screen.FilterSetupsScreen
 import pl.piotrgorny.filtersetup.view.AddOrModifyFilterDialog
 import pl.piotrgorny.filtersetup.view.RemoveFilterDialog
+import pl.piotrgorny.filtersetup.view.RemoveFilterSetupDialog
 import pl.piotrgorny.model.Filter
 import pl.piotrgorny.navigation.GetResult
+import pl.piotrgorny.navigation.GetResultOnce
 import pl.piotrgorny.navigation.popBackStackWithResult
 
 fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController){
@@ -58,8 +60,14 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                 openRemoveFilterDialog = {
                     navController.navigate("removeFilter/${it}")
                 },
+                openRemoveFilterSetupDialog = {
+                    navController.navigate("removeFilterSetup/${it}")
+                },
                 getFilterChanges = {
                     navController.GetResult(key = "filterChange", onResult = it)
+                },
+                getFilterSetupRemoval = {
+                    navController.GetResultOnce(key = "filterSetupDelete", it)
                 }
             )
         }
@@ -116,6 +124,25 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                     },
                     onRemove = {
                         navController.popBackStackWithResult("filterChange", FilterChange(it))
+                    }
+                )
+            }
+        }
+        dialog(
+            route = "removeFilterSetup/{filterSetupId}",
+            arguments = listOf(
+                navArgument("filterSetupId") {
+                    type = NavType.IntType
+                }
+            )
+        ) {backStackEntry ->
+            backStackEntry.arguments?.getInt("filterSetupId")?.let {
+                RemoveFilterSetupDialog(
+                    onDismiss = {
+                        navController.popBackStack()
+                    },
+                    onRemove = {
+                        navController.popBackStackWithResult("filterSetupDelete", it)
                     }
                 )
             }

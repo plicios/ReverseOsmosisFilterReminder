@@ -11,7 +11,4 @@ interface ReverseOsmosisDao<T> {
 
     @Update
     suspend fun update(entity: T)
-
-    @Delete
-    suspend fun delete(entity: T)
 }

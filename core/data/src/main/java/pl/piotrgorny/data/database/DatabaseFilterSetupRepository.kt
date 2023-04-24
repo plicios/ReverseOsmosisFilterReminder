@@ -2,6 +2,7 @@ package pl.piotrgorny.data.database
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import pl.piotrgorny.data.FilterSetupRepository
@@ -32,13 +33,17 @@ class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
         database.filterDao().insert(*filterSetup.filters.map { it.toEntity(id) }.toTypedArray())
     }
 
+    @Transaction
     override suspend fun updateFilterSetup(filterSetup: FilterSetup) {
         database.filterSetupDao().update(filterSetup.toEntity())
-
-
-        throw NotImplementedError()
-        //TODO update only changed filters
+        database.filterDao().deleteByFilterSetup(filterSetup.id)
         database.filterDao().insert(*filterSetup.filters.map { it.toEntity(filterSetup.id) }.toTypedArray())
+    }
+
+    @Transaction
+    override suspend fun deleteFilterSetup(filterSetupId: Long) {
+        database.filterSetupDao().delete(filterSetupId)
+        database.filterDao().deleteByFilterSetup(filterSetupId)
     }
 
     companion object {
@@ -70,7 +75,9 @@ fun FilterEntity.toModel() = Filter(
 fun FilterSetup.toEntity() = FilterSetupEntity(
     name,
     type.name
-)
+).apply {
+    uid = id
+}
 
 fun Filter.toEntity(setupId: Long) = FilterEntity(
     setupId,

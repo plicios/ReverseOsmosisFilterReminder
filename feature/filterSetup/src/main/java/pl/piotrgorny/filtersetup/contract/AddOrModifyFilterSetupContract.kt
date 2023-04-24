@@ -9,7 +9,9 @@ import pl.piotrgorny.mvi.ViewState
 class AddOrModifyFilterSetupContract {
     sealed class Event : ViewEvent {
         object AddOrModifyFilterSetup : Event()
+        object RemoveFilterSetup : Event()
         object RequestModifyFilterSetup: Event()
+        object RequestRemoveFilterSetup: Event()
 
         data class NameChange(val name: String) : Event()
         data class TypeChange(val type: FilterSetup.Type) : Event()
@@ -49,6 +51,7 @@ class AddOrModifyFilterSetupContract {
             object BackToFilterSetups : Navigation()
             data class OpenAddOrModifyFilterDialog(val index: Int? = null, val filter: Filter? = null) : Navigation()
             data class OpenRemoveFilterDialog(val index: Int) : Navigation()
+            data class OpenRemoveFilterSetupDialog(val filterSetupId: Long) : Navigation()
         }
     }
 }

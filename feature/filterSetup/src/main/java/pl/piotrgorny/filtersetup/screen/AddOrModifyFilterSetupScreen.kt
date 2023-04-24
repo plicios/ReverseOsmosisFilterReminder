@@ -18,7 +18,9 @@ fun AddOrModifyFilterSetupScreen(
     navigateBackToList: () -> Unit = {},
     openAddOrModifyFilterDialog: (index: Int?, filter: Filter?) -> Unit = { _, _ -> },
     openRemoveFilterDialog: (index: Int) -> Unit = {},
-    getFilterChanges: @Composable (@Composable (FilterChange) -> Unit) -> Unit
+    openRemoveFilterSetupDialog: (filterSetupId: Long) -> Unit = {},
+    getFilterChanges: @Composable (@Composable (FilterChange) -> Unit) -> Unit = {},
+    getFilterSetupRemoval: @Composable (@Composable (Long) -> Unit) -> Unit = {}
 ) {
     val viewModel: AddOrModifyFilterSetupViewModel = viewModel(factory = AddOrModifyFilterSetupViewModel.Factory(
         filterSetupId,
@@ -36,6 +38,8 @@ fun AddOrModifyFilterSetupScreen(
                     openAddOrModifyFilterDialog(effect.index, effect.filter)
                 is AddOrModifyFilterSetupContract.Effect.Navigation.OpenRemoveFilterDialog ->
                     openRemoveFilterDialog(effect.index)
+                is AddOrModifyFilterSetupContract.Effect.Navigation.OpenRemoveFilterSetupDialog ->
+                    openRemoveFilterSetupDialog(effect.filterSetupId)
             }
         }.collect()
     }
@@ -54,6 +58,12 @@ fun AddOrModifyFilterSetupScreen(
                 it.newValue != null->
                     viewModel.setEvent(AddOrModifyFilterSetupContract.Event.AddFilter(it.newValue))
             }
+        }
+    }
+
+    getFilterSetupRemoval {
+        LaunchedEffect(it) {
+            viewModel.setEvent(AddOrModifyFilterSetupContract.Event.RemoveFilterSetup)
         }
     }
 }
