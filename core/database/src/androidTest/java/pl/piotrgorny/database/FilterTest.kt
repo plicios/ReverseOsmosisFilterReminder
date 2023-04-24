@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.runBlocking
+import org.joda.time.LocalDate
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -50,7 +51,7 @@ class FilterTest {
             0,
             "Carbon",
             "one day",
-            Date()
+            LocalDate()
         )
         filterDao.insert(filter)
         val latch = CountDownLatch(1)
@@ -70,13 +71,13 @@ class FilterTest {
             0,
             "Carbon",
             "one day",
-            Date()
+            LocalDate()
         )
         val modifiedFilter = Filter(
             0,
             "SemiPermeableMembrane",
             "two days",
-            Date()
+            LocalDate()
         )
 
         modifiedFilter.uid = filterDao.insert(filter).first()
@@ -101,7 +102,7 @@ class FilterTest {
             0,
             "Carbon",
             "one day",
-            Date()
+            LocalDate()
         )
 
         filter.uid = filterDao.insert(filter).first()

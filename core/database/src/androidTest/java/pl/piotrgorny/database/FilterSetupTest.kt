@@ -47,7 +47,8 @@ class FilterSetupTest {
     @Test
     fun writeFilterSetupAndReadInList() = runBlocking {
         val filterSetup = FilterSetup(
-            "test"
+            "test",
+            "Custom"
         )
         filterSetupDao.insert(filterSetup)
         val latch = CountDownLatch(1)
@@ -66,10 +67,12 @@ class FilterSetupTest {
     @Test
     fun updateFilterSetup() = runBlocking {
         val filterSetup = FilterSetup(
-            "test"
+            "test",
+            "Custom"
         )
         val modifiedFilterSetup = FilterSetup(
-            "test2"
+            "test2",
+            "Aquarius"
         )
 
         modifiedFilterSetup.uid = filterSetupDao.insert(filterSetup).first()
@@ -95,7 +98,8 @@ class FilterSetupTest {
     @Test
     fun deleteFilterSetup() = runBlocking {
         val filterSetup = FilterSetup(
-            "test"
+            "test",
+            "Custom"
         )
 
         filterSetup.uid = filterSetupDao.insert(filterSetup).first()

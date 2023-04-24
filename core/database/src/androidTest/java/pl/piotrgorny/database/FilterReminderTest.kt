@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.runBlocking
+import org.joda.time.DateTime
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -48,7 +49,7 @@ class FilterReminderTest {
     fun writeFilterSetupAndReadInList() = runBlocking {
         val filterReminder = FilterReminder(
             0,
-            Date(),
+            DateTime(),
             "buynew"
         )
         filterReminderDao.insert(filterReminder)
@@ -67,12 +68,12 @@ class FilterReminderTest {
     fun updateFilterSetup() = runBlocking {
         val filterReminder = FilterReminder(
             0,
-            Date(),
+            DateTime(),
             "buynew"
         )
         val modifiedFilterReminder = FilterReminder(
             0,
-            Date(Date().time + 4000),
+            DateTime(Date().time + 4000),
             "buynew"
         )
 
@@ -96,7 +97,7 @@ class FilterReminderTest {
     fun deleteFilterSetup() = runBlocking {
         val filterReminder = FilterReminder(
             0,
-            Date(),
+            DateTime(),
             "buynew"
         )
 
