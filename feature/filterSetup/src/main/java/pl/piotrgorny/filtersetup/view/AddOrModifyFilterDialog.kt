@@ -38,8 +38,8 @@ fun AddOrModifyFilterDialog(
     val state = viewModel.viewState.value
 
     Dialog(
-        title = "Edit filter",
-        confirmButtonTitle = "Edit",
+        title = if(state.stateType == AddOrModifyFilterContract.State.Type.Add) "Add filter" else "Edit filter",
+        confirmButtonTitle = if(state.stateType == AddOrModifyFilterContract.State.Type.Add) "Add" else "Edit",
         onDismiss = onDismiss,
         onConfirm = {
             viewModel.handleEvents(AddOrModifyFilterContract.Event.AddOrModifyFilter)

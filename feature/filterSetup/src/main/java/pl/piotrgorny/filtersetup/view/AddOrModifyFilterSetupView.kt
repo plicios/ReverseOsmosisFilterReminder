@@ -34,17 +34,19 @@ fun AddOrModifyFilterSetupView(
     onEventSent: (AddOrModifyFilterSetupContract.Event) -> Unit
 ) {
     Scaffold(topBar = {
-        TopAppBar {
-            if(state.stateType == AddOrModifyFilterSetupContract.State.Type.View) {
-                IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestModifyFilterSetup) }) {
-                    Icon(Icons.Filled.Edit, "edit filter setup")
+        if(state.stateType != AddOrModifyFilterSetupContract.State.Type.Add) {
+            TopAppBar {
+                if(state.stateType == AddOrModifyFilterSetupContract.State.Type.View) {
+                    IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestModifyFilterSetup) }) {
+                        Icon(Icons.Filled.Edit, "edit filter setup")
+                    }
                 }
-            }
-            IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilterSetup) }) {
-                Icon(Icons.Filled.Delete, "delete filter setup")
-            }
-            IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRenewFilters) }) {
-                Icon(Icons.Filled.Refresh, "Renew filters")
+                IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilterSetup) }) {
+                    Icon(Icons.Filled.Delete, "delete filter setup")
+                }
+                IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRenewFilters) }) {
+                    Icon(Icons.Filled.Refresh, "Renew filters")
+                }
             }
         }
     }) { paddingValues ->

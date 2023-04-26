@@ -18,12 +18,20 @@ class AddOrModifyFilterContract {
         val type: Filter.Type? = null,
         val lifeSpan: Filter.LifeSpan? = null,
         val installationDate: LocalDate? = null,
+        val stateType: Type
     ) : ViewState {
-        constructor(filter: Filter) :
-                this(filter.type,
-                    filter.lifeSpan,
-                    filter.installationDate
+        constructor(type: Filter.Type? = null,
+                    lifeSpan: Filter.LifeSpan? = null,
+                    installationDate: LocalDate? = null) :
+                this(type,
+                    lifeSpan,
+                    installationDate,
+                    if(type != null && lifeSpan != null && installationDate != null) Type.Edit else Type.Add
                 )
+        enum class Type{
+            Add,
+            Edit
+        }
     }
 
     sealed class Effect : ViewSideEffect {
