@@ -16,6 +16,7 @@ import pl.piotrgorny.filtersetup.screen.FilterSetupsScreen
 import pl.piotrgorny.filtersetup.view.AddOrModifyFilterDialog
 import pl.piotrgorny.filtersetup.view.RemoveFilterDialog
 import pl.piotrgorny.filtersetup.view.RemoveFilterSetupDialog
+import pl.piotrgorny.filtersetup.view.RenewFiltersDialog
 import pl.piotrgorny.model.Filter
 import pl.piotrgorny.navigation.GetResult
 import pl.piotrgorny.navigation.GetResultOnce
@@ -62,6 +63,9 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                 },
                 openRemoveFilterSetupDialog = {
                     navController.navigate("removeFilterSetup/${it}")
+                },
+                openRenewFiltersDialog = {
+                    navController.navigate("renewFilters/${it}")
                 },
                 getFilterChanges = {
                     navController.GetResult(key = "filterChange", onResult = it)
@@ -132,17 +136,37 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
             route = "removeFilterSetup/{filterSetupId}",
             arguments = listOf(
                 navArgument("filterSetupId") {
-                    type = NavType.IntType
+                    type = NavType.LongType
                 }
             )
         ) {backStackEntry ->
-            backStackEntry.arguments?.getInt("filterSetupId")?.let {
+            backStackEntry.arguments?.getLong("filterSetupId")?.let {
                 RemoveFilterSetupDialog(
                     onDismiss = {
                         navController.popBackStack()
                     },
                     onRemove = {
                         navController.popBackStackWithResult("filterSetupDelete", it)
+                    }
+                )
+            }
+        }
+        dialog(
+            route = "renewFilters/{filterSetupId}",
+            arguments = listOf(
+                navArgument("filterSetupId") {
+                    type = NavType.LongType
+                }
+            )
+        ) {backStackEntry ->
+            backStackEntry.arguments?.getLong("filterSetupId")?.let {
+                RenewFiltersDialog(
+                    filterSetupId = it,
+                    onDismiss = {
+                        navController.popBackStack()
+                    },
+                    onFiltersRenewed = {
+                        navController.popBackStack("filterSetups", false)
                     }
                 )
             }

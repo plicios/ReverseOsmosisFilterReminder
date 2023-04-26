@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDate
 import pl.piotrgorny.common.remove
 import pl.piotrgorny.data.FilterSetupRepository
 import pl.piotrgorny.data.database.DatabaseFilterSetupRepository
@@ -73,6 +74,9 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
                     viewState.value.filters.indexOf(event.filter)
                 ) }
             }
+            is AddOrModifyFilterSetupContract.Event.RequestRenewFilters -> {
+                filterSetupId?.let { setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.OpenRenewFiltersDialog(it) } }
+            }
             is AddOrModifyFilterSetupContract.Event.AddFilter -> {
                 setState { copy(filters = filters + event.filter) }
             }
@@ -110,7 +114,7 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
 
     private fun validateInput() = true
 
-    private fun saveFilterSetup(){
+    private fun saveFilterSetup() {
         viewState.value.toFilterSetup()?.let {
             viewModelScope.launch {
                 if(filterSetupId != null)
@@ -121,7 +125,7 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
         }
     }
 
-    private fun deleteFilterSetup(){
+    private fun deleteFilterSetup() {
         filterSetupId?.let {
             viewModelScope.launch {
                 repository.deleteFilterSetup(it)

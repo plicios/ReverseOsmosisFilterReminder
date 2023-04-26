@@ -19,6 +19,7 @@ fun AddOrModifyFilterSetupScreen(
     openAddOrModifyFilterDialog: (index: Int?, filter: Filter?) -> Unit = { _, _ -> },
     openRemoveFilterDialog: (index: Int) -> Unit = {},
     openRemoveFilterSetupDialog: (filterSetupId: Long) -> Unit = {},
+    openRenewFiltersDialog: (filterSetupId: Long) -> Unit = {},
     getFilterChanges: @Composable (@Composable (FilterChange) -> Unit) -> Unit = {},
     getFilterSetupRemoval: @Composable (@Composable (Long) -> Unit) -> Unit = {}
 ) {
@@ -31,7 +32,6 @@ fun AddOrModifyFilterSetupScreen(
     LaunchedEffect(viewModel) {
         viewModel.effect.onEach { effect ->
             when (effect) {
-                is AddOrModifyFilterSetupContract.Effect.ToastDataWasLoaded -> {  }
                 is AddOrModifyFilterSetupContract.Effect.Navigation.BackToFilterSetups ->
                     navigateBackToList()
                 is AddOrModifyFilterSetupContract.Effect.Navigation.OpenAddOrModifyFilterDialog ->
@@ -40,6 +40,8 @@ fun AddOrModifyFilterSetupScreen(
                     openRemoveFilterDialog(effect.index)
                 is AddOrModifyFilterSetupContract.Effect.Navigation.OpenRemoveFilterSetupDialog ->
                     openRemoveFilterSetupDialog(effect.filterSetupId)
+                is AddOrModifyFilterSetupContract.Effect.Navigation.OpenRenewFiltersDialog ->
+                    openRenewFiltersDialog(effect.filterSetupId)
             }
         }.collect()
     }

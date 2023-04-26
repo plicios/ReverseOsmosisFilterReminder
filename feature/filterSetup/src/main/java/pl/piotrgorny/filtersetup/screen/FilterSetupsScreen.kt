@@ -23,7 +23,6 @@ fun FilterSetupsScreen(
     LaunchedEffect(viewModel) {
         viewModel.effect.onEach { effect ->
             when (effect) {
-                is FilterSetupsContract.Effect.ToastDataWasLoaded -> {  }
                 is FilterSetupsContract.Effect.Navigation.ToFilterSetupDetails ->
                     navigateToFilterSetupDetails(effect.filterSetup)
                 is FilterSetupsContract.Effect.Navigation.ToAddFilterSetup ->

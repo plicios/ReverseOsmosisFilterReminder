@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,14 +34,17 @@ fun AddOrModifyFilterSetupView(
     onEventSent: (AddOrModifyFilterSetupContract.Event) -> Unit
 ) {
     Scaffold(topBar = {
-        if(state.stateType == AddOrModifyFilterSetupContract.State.Type.View){
-            TopAppBar {
+        TopAppBar {
+            if(state.stateType == AddOrModifyFilterSetupContract.State.Type.View) {
                 IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestModifyFilterSetup) }) {
                     Icon(Icons.Filled.Edit, "edit filter setup")
                 }
-                IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilterSetup) }) {
-                    Icon(Icons.Filled.Delete, "delete filter setup")
-                }
+            }
+            IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilterSetup) }) {
+                Icon(Icons.Filled.Delete, "delete filter setup")
+            }
+            IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRenewFilters) }) {
+                Icon(Icons.Filled.Refresh, "Renew filters")
             }
         }
     }) { paddingValues ->

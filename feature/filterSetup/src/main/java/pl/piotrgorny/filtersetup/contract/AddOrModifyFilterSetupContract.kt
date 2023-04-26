@@ -19,6 +19,7 @@ class AddOrModifyFilterSetupContract {
         object RequestAddFilter : Event()
         data class RequestModifyFilter(val filter: Filter) : Event()
         data class RequestRemoveFilter(val filter: Filter) : Event()
+        object RequestRenewFilters : Event()
 
         data class AddFilter(val filter: Filter) : Event()
         data class ModifyFilter(val index: Int, val newFilter: Filter) : Event()
@@ -46,12 +47,12 @@ class AddOrModifyFilterSetupContract {
     }
 
     sealed class Effect : ViewSideEffect {
-        object ToastDataWasLoaded : Effect()
         sealed class Navigation : Effect() {
             object BackToFilterSetups : Navigation()
             data class OpenAddOrModifyFilterDialog(val index: Int? = null, val filter: Filter? = null) : Navigation()
             data class OpenRemoveFilterDialog(val index: Int) : Navigation()
             data class OpenRemoveFilterSetupDialog(val filterSetupId: Long) : Navigation()
+            data class OpenRenewFiltersDialog(val filterSetupId: Long) : Navigation()
         }
     }
 }

@@ -35,9 +35,11 @@ class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
 
     @Transaction
     override suspend fun updateFilterSetup(filterSetup: FilterSetup) {
-        database.filterSetupDao().update(filterSetup.toEntity())
-        database.filterDao().deleteByFilterSetup(filterSetup.id)
-        database.filterDao().insert(*filterSetup.filters.map { it.toEntity(filterSetup.id) }.toTypedArray())
+        filterSetup.id?.let {
+            database.filterSetupDao().update(filterSetup.toEntity())
+            database.filterDao().deleteByFilterSetup(it)
+            database.filterDao().insert(*filterSetup.filters.map { filter -> filter.toEntity(it) }.toTypedArray())
+        }
     }
 
     @Transaction
@@ -76,7 +78,9 @@ fun FilterSetup.toEntity() = FilterSetupEntity(
     name,
     type.name
 ).apply {
-    uid = id
+    id?.let {
+        uid = it
+    }
 }
 
 fun Filter.toEntity(setupId: Long) = FilterEntity(

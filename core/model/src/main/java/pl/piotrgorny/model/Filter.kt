@@ -19,7 +19,7 @@ data class Filter(
         type, LocalDate(), LifeSpan.One_Day
     )
 
-    fun getExpirationDate() : Date = (LocalDate(installationDate) + lifeSpan.period).toDate()
+    fun getExpirationDate() : LocalDate = installationDate.plus(lifeSpan.period)
 
     fun compareWithoutId(otherFilter: Filter): Boolean =
             type == otherFilter.type &&

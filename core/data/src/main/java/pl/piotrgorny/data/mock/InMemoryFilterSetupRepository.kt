@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import pl.piotrgorny.common.replace
 import pl.piotrgorny.data.FilterSetupRepository
-import pl.piotrgorny.model.Filter
 import pl.piotrgorny.model.FilterSetup
 
 object InMemoryFilterSetupRepository : FilterSetupRepository {
@@ -18,7 +17,7 @@ object InMemoryFilterSetupRepository : FilterSetupRepository {
     }
 
     override fun getFilterSetup(id: Long): Flow<FilterSetup?> {
-        return inMemoryList.asStateFlow().map { it.firstOrNull{it.id == id} }
+        return inMemoryList.asStateFlow().map { it.firstOrNull{ filterSetup ->  filterSetup.id == id } }
     }
 
     override suspend fun addFilterSetup(filterSetup: FilterSetup) {

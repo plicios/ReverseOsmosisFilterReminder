@@ -33,7 +33,6 @@ class FilterSetupsViewModel(private val repository: FilterSetupRepository) : Mvi
     private suspend fun getFilterSetups() {
         repository.getFilterSetups().collect {
             setState { copy(filterSetups = it, isLoading = false) }
-            setEffect { FilterSetupsContract.Effect.ToastDataWasLoaded }
         }
     }
 
@@ -41,7 +40,6 @@ class FilterSetupsViewModel(private val repository: FilterSetupRepository) : Mvi
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return FilterSetupsViewModel(
-//                InMemoryFilterSetupRepository
                     DatabaseFilterSetupRepository.instance(context)
             ) as T
         }

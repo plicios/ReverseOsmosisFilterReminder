@@ -26,7 +26,7 @@ fun AddOrModifyFilterDialog(
 ) {
     val viewModel: AddOrModifyFilterViewModel = viewModel(factory = AddOrModifyFilterViewModel.Factory(type, installationDate, lifeSpan))
 
-    LaunchedEffect(viewModel) {//TODO add key
+    LaunchedEffect(viewModel) {
         viewModel.effect.onEach { effect ->
             when (effect) {
                 is AddOrModifyFilterContract.Effect.FilterAddedOrModified -> onFilterAddedOrModified(effect.filter)

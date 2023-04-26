@@ -3,13 +3,13 @@ package pl.piotrgorny.model
 import pl.piotrgorny.common.remove
 
 data class FilterSetup(
-    val id: Long,
+    val id: Long?,
     val name: String,
     val type: Type,
     val filters: List<Filter>
 ) {
     constructor(name: String, type: Type, filters: List<Filter>) : this(
-        -1, name, type, filters
+        null, name, type, filters
     )
 
     constructor(type: Type, filters: List<Filter>) : this(

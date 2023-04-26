@@ -14,7 +14,6 @@ class FilterSetupsContract {
     data class State(val filterSetups: List<FilterSetup> = listOf(), val isLoading: Boolean = false) : ViewState
 
     sealed class Effect : ViewSideEffect {
-        object ToastDataWasLoaded : Effect()
         sealed class Navigation : Effect() {
             data class ToFilterSetupDetails(val filterSetup: FilterSetup) : Navigation()
             object ToAddFilterSetup : Navigation()
