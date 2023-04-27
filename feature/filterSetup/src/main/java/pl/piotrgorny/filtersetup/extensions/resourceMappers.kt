@@ -17,8 +17,6 @@ fun Filter.Type.print() : String { //TODO to be changed to string res
 
 fun Filter.LifeSpan.print() : String {
     return when(this){
-        Filter.LifeSpan.One_Day -> "One day"
-        Filter.LifeSpan.Two_Days -> "Two days"
         Filter.LifeSpan.One_Week -> "One week"
         Filter.LifeSpan.Two_Weeks -> "Two weeks"
         Filter.LifeSpan.Three_Weeks -> "Three weeks"

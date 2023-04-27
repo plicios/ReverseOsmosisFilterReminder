@@ -2,29 +2,23 @@ package pl.piotrgorny.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.joda.time.*
-import java.util.*
+import org.joda.time.LocalDate
+import org.joda.time.Months
+import org.joda.time.ReadablePeriod
+import org.joda.time.Weeks
+import org.joda.time.Years
 
 @Parcelize
 data class Filter(
-    val id: Long,
     val type: Type,
     val installationDate: LocalDate,
     val lifeSpan: LifeSpan
 ) : Parcelable {
-    constructor(type: Type, installationDate: LocalDate, lifeSpan: LifeSpan) : this(
-        -1, type, installationDate, lifeSpan
-    )
     constructor(type: Type) : this(
-        type, LocalDate(), LifeSpan.One_Day
+        type, LocalDate(), LifeSpan.Half_Year
     )
 
     fun getExpirationDate() : LocalDate = installationDate.plus(lifeSpan.period)
-
-    fun compareWithoutId(otherFilter: Filter): Boolean =
-            type == otherFilter.type &&
-            installationDate == otherFilter.installationDate &&
-            lifeSpan == otherFilter.lifeSpan
 
     @Parcelize
     sealed class Type : Parcelable {
@@ -35,10 +29,20 @@ data class Filter(
             object SedimentPS_5 : Sediment(5)
             object SedimentPS_1 : Sediment(1)
 
-            object Any : Sediment(-1)
+            object Any : Sediment(-1) {
+                override fun equals(other: kotlin.Any?): Boolean {
+                    if(other is Sediment) return true
+                    return super.equals(other)
+                }
+            }
 
             override val name: String
                 get() = "Sediment:$micronValue"
+
+            override fun equals(other: kotlin.Any?): Boolean {
+                if(other is Any) return true
+                return super.equals(other)
+            }
         }
         object Carbon : Type() {
             override val name: String
@@ -101,7 +105,7 @@ data class Filter(
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (javaClass != other?.javaClass) return false
+            if (other !is Type) return false
 
             other as Type
 
@@ -116,8 +120,6 @@ data class Filter(
     }
 
     enum class LifeSpan(val period: ReadablePeriod) {
-        One_Day(Days.ONE),
-        Two_Days(Days.TWO),
         One_Week(Weeks.ONE),
         Two_Weeks(Weeks.TWO),
         Three_Weeks(Weeks.THREE),

@@ -37,8 +37,10 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
         when(event){
             is AddOrModifyFilterSetupContract.Event.AddOrModifyFilterSetup -> {
                 if(validateInput()){
-                    saveFilterSetup()
-                    setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.BackToFilterSetups }
+                    viewState.value.toFilterSetup()?.let {
+                        saveFilterSetup(it)
+                        setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.BackToFilterSetups }
+                    }
                 } else {
                     //TODO add error handling
                 }
@@ -65,18 +67,18 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
             }
             is AddOrModifyFilterSetupContract.Event.RequestModifyFilter -> {
                 setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.OpenAddOrModifyFilterDialog(
-                    viewState.value.filters.indexOf(event.filter),
+                    event.index,
                     event.filter
                 ) }
             }
             is AddOrModifyFilterSetupContract.Event.RequestRemoveFilter -> {
                 setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.OpenRemoveFilterDialog(
-                    viewState.value.filters.indexOf(event.filter)
+                    event.index
                 ) }
             }
-            is AddOrModifyFilterSetupContract.Event.RequestRenewFilters -> {
-                filterSetupId?.let { setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.OpenRenewFiltersDialog(it) } }
-            }
+//            is AddOrModifyFilterSetupContract.Event.RequestRenewFilters -> {
+//                setState { copy(stateType = AddOrModifyFilterSetupContract.State.Type.RenewFilters) }
+//            }
             is AddOrModifyFilterSetupContract.Event.AddFilter -> {
                 setState { copy(filters = filters + event.filter) }
             }
@@ -89,6 +91,13 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
                 setState { copy(filters = filters.toMutableList().apply {
                     this.removeAt(event.index)
                 }) }
+            }
+            is AddOrModifyFilterSetupContract.Event.RenewFilters -> {
+                val renewedFilters = renewedFilters()
+                viewState.value.toFilterSetup(renewedFilters)?.let {
+                    saveFilterSetup(it)
+                    setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.BackToFilterSetups }
+                }
             }
         }
     }
@@ -114,14 +123,21 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
 
     private fun validateInput() = true
 
-    private fun saveFilterSetup() {
-        viewState.value.toFilterSetup()?.let {
-            viewModelScope.launch {
-                if(filterSetupId != null)
-                    repository.updateFilterSetup(it.copy(id = filterSetupId))
-                else
-                    repository.addFilterSetup(it)
-            }
+    private fun renewedFilters() : List<Filter> {
+        val today = LocalDate()
+        return viewState.value.filters.map {
+            if(it.getExpirationDate().isBefore(today))
+                it.copy(installationDate = today)
+            else
+                it
+        }
+    }
+    private fun saveFilterSetup(filterSetup: FilterSetup) {
+        viewModelScope.launch {
+            if(filterSetupId != null)
+                repository.updateFilterSetup(filterSetup.copy(id = filterSetupId))
+            else
+                repository.addFilterSetup(filterSetup)
         }
     }
 
@@ -133,9 +149,9 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
         }
     }
 
-    private fun AddOrModifyFilterSetupContract.State.toFilterSetup() : FilterSetup? =
+    private fun AddOrModifyFilterSetupContract.State.toFilterSetup(filters: List<Filter>? = null) : FilterSetup? =
         if(this.name.isNotEmpty())
-            FilterSetup(this.name, this.type, this.filters)
+            FilterSetup(this.name, this.type, filters ?: this.filters)
         else
             null
 

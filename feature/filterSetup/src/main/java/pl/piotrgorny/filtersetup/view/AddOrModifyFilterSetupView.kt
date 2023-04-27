@@ -34,18 +34,22 @@ fun AddOrModifyFilterSetupView(
     onEventSent: (AddOrModifyFilterSetupContract.Event) -> Unit
 ) {
     Scaffold(topBar = {
-        if(state.stateType != AddOrModifyFilterSetupContract.State.Type.Add) {
+        if(state.stateType.canAny()) {
             TopAppBar {
-                if(state.stateType == AddOrModifyFilterSetupContract.State.Type.View) {
+                if(state.stateType.canSwitchToEdit) {
                     IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestModifyFilterSetup) }) {
                         Icon(Icons.Filled.Edit, "edit filter setup")
                     }
                 }
-                IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilterSetup) }) {
-                    Icon(Icons.Filled.Delete, "delete filter setup")
+                if(state.stateType.canDelete) {
+                    IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilterSetup) }) {
+                        Icon(Icons.Filled.Delete, "delete filter setup")
+                    }
                 }
-                IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRenewFilters) }) {
-                    Icon(Icons.Filled.Refresh, "Renew filters")
+                if(state.stateType.canSwitchToRenew) {
+                    IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RenewFilters) }) {
+                        Icon(Icons.Filled.Refresh, "Renew filters")
+                    }
                 }
             }
         }
@@ -66,15 +70,7 @@ fun AddOrModifyFilterSetupView(
                 },
                 label = { Text(text = "Name") }
             )
-            if(state.stateType == AddOrModifyFilterSetupContract.State.Type.View) {
-                OutlinedTextField(
-                    readOnly = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    value = state.type.name,
-                    label = { Text(text = "Type") },
-                    onValueChange = {}
-                )
-            } else {
+            if (state.stateType.isEditable) {
                 Dropdown(
                     label = "Type",
                     options = FilterSetup.Type.values(),
@@ -83,12 +79,20 @@ fun AddOrModifyFilterSetupView(
                 ) {
                     onEventSent(AddOrModifyFilterSetupContract.Event.TypeChange(it))
                 }
+            } else {
+                OutlinedTextField(
+                    readOnly = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state.type.name,
+                    label = { Text(text = "Type") },
+                    onValueChange = {}
+                )
             }
 
             Row(modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "Filters")
-                if(state.stateType != AddOrModifyFilterSetupContract.State.Type.View) {
+                if(state.stateType.isEditable) {
                     IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestAddFilter) }) {
                         Icon(Icons.Filled.Add, contentDescription = "Add filter")
                     }
@@ -101,12 +105,12 @@ fun AddOrModifyFilterSetupView(
                 itemsIndexed(state.filters) {index, item ->
                     FilterRow(
                         filter = item,
-                        readOnly = state.stateType == AddOrModifyFilterSetupContract.State.Type.View,
+                        readOnly = !state.stateType.isEditable,
                         onFilterEditPress = { filter ->
-                            onEventSent(AddOrModifyFilterSetupContract.Event.RequestModifyFilter(filter))
+                            onEventSent(AddOrModifyFilterSetupContract.Event.RequestModifyFilter(index, filter))
                         },
-                        onFilterRemovePress = { filter ->
-                            onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilter(filter))
+                        onFilterRemovePress = {
+                            onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilter(index))
                         }
                     )
                 }

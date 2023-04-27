@@ -17,13 +17,14 @@ class AddOrModifyFilterSetupContract {
         data class TypeChange(val type: FilterSetup.Type) : Event()
 
         object RequestAddFilter : Event()
-        data class RequestModifyFilter(val filter: Filter) : Event()
-        data class RequestRemoveFilter(val filter: Filter) : Event()
-        object RequestRenewFilters : Event()
+        data class RequestModifyFilter(val index: Int, val filter: Filter) : Event()
+        data class RequestRemoveFilter(val index: Int) : Event()
+//        object RequestRenewFilters : Event()
 
         data class AddFilter(val filter: Filter) : Event()
         data class ModifyFilter(val index: Int, val newFilter: Filter) : Event()
         data class RemoveFilter(val index: Int) : Event()
+        object RenewFilters : Event()
     }
 
     data class State(
@@ -39,10 +40,13 @@ class AddOrModifyFilterSetupContract {
                     filterSetup.filters,
                     stateType = Type.View
                 )
-        sealed class Type {
-            object Add: Type()
-            object Modify: Type()
-            object View: Type()
+        enum class Type(val isEditable: Boolean, val canSwitchToEdit: Boolean, val canDelete: Boolean, val canSwitchToRenew: Boolean) {
+            Add(true, false, false, false),
+            Modify(true, false, true, true),
+            View(false, true, true, true);
+//            RenewFilters(false, true, true, false);
+
+            fun canAny() : Boolean = canSwitchToEdit || canDelete || canSwitchToRenew
         }
     }
 

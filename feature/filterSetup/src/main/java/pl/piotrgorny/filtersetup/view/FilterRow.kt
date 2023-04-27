@@ -3,7 +3,10 @@ package pl.piotrgorny.filtersetup.view
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -18,14 +21,13 @@ import androidx.constraintlayout.compose.Dimension
 import org.joda.time.LocalDate
 import pl.piotrgorny.filtersetup.extensions.print
 import pl.piotrgorny.model.Filter
-import java.util.*
 
 @Composable
 fun FilterRow(
     filter: Filter,
     readOnly: Boolean = false,
     onFilterEditPress: (Filter) -> Unit = {},
-    onFilterRemovePress: (Filter) -> Unit = {}
+    onFilterRemovePress: () -> Unit = {}
 ) {
     Card(modifier = Modifier.fillMaxWidth().padding(15.dp), elevation = 10.dp) {
         BoxWithConstraints {
@@ -54,7 +56,7 @@ fun FilterRow(
                     }
                     IconButton(
                         modifier = Modifier.layoutId("remove"),
-                        onClick = { onFilterRemovePress(filter) }) {
+                        onClick = onFilterRemovePress) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = "remove filter"
@@ -125,5 +127,5 @@ private fun filterRowDecoupledConstraints() = ConstraintSet {
 @Preview
 @Composable
 fun FilterRowPreview(){
-    FilterRow(filter = Filter(Filter.Type.InlineCarbon, LocalDate(), Filter.LifeSpan.One_Day))
+    FilterRow(filter = Filter(Filter.Type.InlineCarbon, LocalDate(), Filter.LifeSpan.Half_Year))
 }

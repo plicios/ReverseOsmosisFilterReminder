@@ -39,3 +39,33 @@ fun Dialog(
         }
     }
 }
+
+@Composable
+fun AlertDialog(
+    title: String = "",
+    confirmButtonTitle: String = "Confirm",
+    cancelButtonTitle: String = "Cancel",
+    onConfirm: () -> Unit = {},
+    onDismiss: () -> Unit = {},
+    content: @Composable () -> Unit = {}
+) {
+    androidx.compose.material.AlertDialog(
+        onDismissRequest = onDismiss,
+        buttons = {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                TextButton(onClick = onDismiss) {
+                    Text(text = cancelButtonTitle)
+                }
+                TextButton(onClick = onConfirm) {
+                    Text(text = confirmButtonTitle)
+                }
+            }
+        },
+        title = {
+            Text(text = title)
+        },
+        text = {
+            content()
+        }
+    )
+}
