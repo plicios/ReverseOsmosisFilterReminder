@@ -124,10 +124,9 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
     private fun validateInput() = true
 
     private fun renewedFilters() : List<Filter> {
-        val today = LocalDate()
         return viewState.value.filters.map {
-            if(it.getExpirationDate().isBefore(today))
-                it.copy(installationDate = today)
+            if(it.isExpired)
+                it.copy(installationDate = LocalDate())
             else
                 it
         }

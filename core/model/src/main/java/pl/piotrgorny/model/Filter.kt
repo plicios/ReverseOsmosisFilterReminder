@@ -18,8 +18,11 @@ data class Filter(
         type, LocalDate(), LifeSpan.Half_Year
     )
 
-    fun getExpirationDate() : LocalDate = installationDate.plus(lifeSpan.period)
+    val expirationDate : LocalDate
+        get() = installationDate.plus(lifeSpan.period)
 
+    val isExpired : Boolean
+        get() = expirationDate.isBefore(LocalDate())
     @Parcelize
     sealed class Type : Parcelable {
         @Parcelize

@@ -1,11 +1,13 @@
 package pl.piotrgorny.filtersetup.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -29,8 +31,12 @@ fun FilterRow(
     onFilterEditPress: (Filter) -> Unit = {},
     onFilterRemovePress: () -> Unit = {}
 ) {
-    Card(modifier = Modifier.fillMaxWidth().padding(15.dp), elevation = 10.dp) {
-        BoxWithConstraints {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp),
+        elevation = 10.dp) {
+        BoxWithConstraints(Modifier.background(if(filter.isExpired) MaterialTheme.colors.error else MaterialTheme.colors.surface)) {
             val constraints = filterRowDecoupledConstraints()
             ConstraintLayout(constraints,
                 modifier = Modifier.padding(start = 15.dp, bottom = 15.dp).fillMaxWidth()) {
@@ -42,7 +48,7 @@ fun FilterRow(
 
                 Text(text = filter.type.print(), modifier = Modifier.layoutId("type"))
                 Text(text = filter.installationDate.print(), modifier = Modifier.layoutId("installationDate"))
-                Text(text = filter.getExpirationDate().print(), modifier = Modifier.layoutId("expirationDate"))
+                Text(text = filter.expirationDate.print(), modifier = Modifier.layoutId("expirationDate"))
                 Text(text = filter.lifeSpan.print(), modifier = Modifier.layoutId("lifeSpan"))
 
                 if(!readOnly) {
