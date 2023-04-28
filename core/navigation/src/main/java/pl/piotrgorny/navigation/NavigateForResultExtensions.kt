@@ -2,6 +2,7 @@ package pl.piotrgorny.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 
 @Composable
@@ -31,3 +32,5 @@ fun <T> NavController.popBackStackWithResult(key: String, result: T){
             ?.set(key, result)
     popBackStack()
 }
+
+fun <T> NavBackStackEntry.get(key: String, converter: (String) -> T) = arguments?.getString(key)?.let(converter)

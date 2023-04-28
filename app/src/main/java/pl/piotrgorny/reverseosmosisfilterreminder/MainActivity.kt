@@ -7,6 +7,7 @@ import androidx.compose.material.Surface
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import pl.piotrgorny.filtersetup.navigation.filterSetupNavigationGraph
+import pl.piotrgorny.reminder.reminderNavigationGraph
 import pl.piotrgorny.reverseosmosisfilterreminder.ui.theme.ReverseOsmosisFilterReminderTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,9 +19,9 @@ class MainActivity : ComponentActivity() {
                 Surface {
                     NavHost(navController = navController, startDestination = "filterSetup") {
                         filterSetupNavigationGraph(navController)
+                        reminderNavigationGraph(navController)
                     }
                 }
-
             }
         }
     }
