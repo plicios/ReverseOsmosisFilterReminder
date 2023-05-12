@@ -47,7 +47,7 @@ fun AddOrModifyFilterSetupView(
                     }
                 }
                 if(state.stateType.canSwitchToRenew) {
-                    IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RenewFilters) }) {
+                    IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRenewFilters) }) {
                         Icon(Icons.Filled.Refresh, "Renew filters")
                     }
                 }

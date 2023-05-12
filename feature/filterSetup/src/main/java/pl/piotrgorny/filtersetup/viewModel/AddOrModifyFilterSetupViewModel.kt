@@ -92,6 +92,11 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
                     this.removeAt(event.index)
                 }) }
             }
+            is AddOrModifyFilterSetupContract.Event.RequestRenewFilters -> {
+                filterSetupId?.let {
+                    setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.OpenRenewFiltersView(it) }
+                }
+            }
             is AddOrModifyFilterSetupContract.Event.RenewFilters -> {
                 val renewedFilters = renewedFilters()
                 viewState.value.toFilterSetup(renewedFilters)?.let {

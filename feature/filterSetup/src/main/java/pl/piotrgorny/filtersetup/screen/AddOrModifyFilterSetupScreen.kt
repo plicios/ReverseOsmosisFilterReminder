@@ -19,7 +19,7 @@ fun AddOrModifyFilterSetupScreen(
     openAddOrModifyFilterDialog: (index: Int?, filter: Filter?) -> Unit = { _, _ -> },
     openRemoveFilterDialog: (index: Int) -> Unit = {},
     openRemoveFilterSetupDialog: (filterSetupId: Long) -> Unit = {},
-    openRenewFiltersDialog: (filterSetupId: Long) -> Unit = {},
+    openRenewFiltersView: (filterSetupId: Long) -> Unit = {},
     getFilterChanges: @Composable (@Composable (FilterChange) -> Unit) -> Unit = {},
     getFilterSetupRemoval: @Composable (@Composable (Long) -> Unit) -> Unit = {}
 ) {
@@ -40,8 +40,8 @@ fun AddOrModifyFilterSetupScreen(
                     openRemoveFilterDialog(effect.index)
                 is AddOrModifyFilterSetupContract.Effect.Navigation.OpenRemoveFilterSetupDialog ->
                     openRemoveFilterSetupDialog(effect.filterSetupId)
-                is AddOrModifyFilterSetupContract.Effect.Navigation.OpenRenewFiltersDialog ->
-                    openRenewFiltersDialog(effect.filterSetupId)
+                is AddOrModifyFilterSetupContract.Effect.Navigation.OpenRenewFiltersView ->
+                    openRenewFiltersView(effect.filterSetupId)
             }
         }.collect()
     }

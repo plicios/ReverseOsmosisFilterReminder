@@ -13,6 +13,7 @@ import pl.piotrgorny.filtersetup.extensions.print
 import pl.piotrgorny.filtersetup.extensions.toDate
 import pl.piotrgorny.filtersetup.screen.AddOrModifyFilterSetupScreen
 import pl.piotrgorny.filtersetup.screen.FilterSetupsScreen
+import pl.piotrgorny.filtersetup.screen.RenewFiltersScreen
 import pl.piotrgorny.filtersetup.view.AddOrModifyFilterDialog
 import pl.piotrgorny.filtersetup.view.RemoveFilterDialog
 import pl.piotrgorny.filtersetup.view.RemoveFilterSetupDialog
@@ -63,7 +64,7 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                 openRemoveFilterSetupDialog = {
                     navController.navigate("removeFilterSetup/${it}")
                 },
-                openRenewFiltersDialog = {
+                openRenewFiltersView = {
                     navController.navigate("renewFilters/${it}")
                 },
                 getFilterChanges = {
@@ -73,6 +74,23 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                     navController.GetResultOnce(key = "filterSetupDelete", it)
                 }
             )
+        }
+        composable(
+            route = "renewFilters/{filterSetupId}",
+            arguments = listOf(
+                navArgument("filterSetupId") {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getLong("filterSetupId")?.let {
+                RenewFiltersScreen(
+                    filterSetupId = it,
+                    navigateBackToFilterSetupDetails = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
         dialog(
             route = "addOrModifyFilter?index={index}&type={type}&installationDate={installationDate}&lifeSpan={lifeSpan}",
@@ -119,7 +137,7 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                     type = NavType.IntType
                 }
             )
-        ) {backStackEntry ->
+        ) { backStackEntry ->
             backStackEntry.arguments?.getInt("index")?.let {
                 RemoveFilterDialog(
                     onDismiss = {
@@ -138,7 +156,7 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                     type = NavType.LongType
                 }
             )
-        ) {backStackEntry ->
+        ) { backStackEntry ->
             backStackEntry.arguments?.getLong("filterSetupId")?.let {
                 RemoveFilterSetupDialog(
                     onDismiss = {

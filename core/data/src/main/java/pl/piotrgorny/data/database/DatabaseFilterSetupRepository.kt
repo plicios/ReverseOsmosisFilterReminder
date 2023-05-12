@@ -2,7 +2,7 @@ package pl.piotrgorny.data.database
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.Transaction
+import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import pl.piotrgorny.data.FilterSetupRepository
@@ -29,23 +29,27 @@ class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
     }
 
     override suspend fun addFilterSetup(filterSetup: FilterSetup) {
-        val id = database.filterSetupDao().insert(filterSetup.toEntity()).first()
-        database.filterDao().insert(*filterSetup.filters.map { it.toEntity(id) }.toTypedArray())
-    }
-
-    @Transaction
-    override suspend fun updateFilterSetup(filterSetup: FilterSetup) {
-        filterSetup.id?.let {
-            database.filterSetupDao().update(filterSetup.toEntity())
-            database.filterDao().deleteByFilterSetup(it)
-            database.filterDao().insert(*filterSetup.filters.map { filter -> filter.toEntity(it) }.toTypedArray())
+        database.withTransaction {
+            val id = database.filterSetupDao().insert(filterSetup.toEntity()).first()
+            database.filterDao().insert(*filterSetup.filters.map { it.toEntity(id) }.toTypedArray())
         }
     }
 
-    @Transaction
+    override suspend fun updateFilterSetup(filterSetup: FilterSetup) {
+        filterSetup.id?.let {
+            database.withTransaction {
+                database.filterSetupDao().update(filterSetup.toEntity())
+                database.filterDao().deleteByFilterSetup(it)
+                database.filterDao().insert(*filterSetup.filters.map { filter -> filter.toEntity(it) }.toTypedArray())
+            }
+        }
+    }
+
     override suspend fun deleteFilterSetup(filterSetupId: Long) {
-        database.filterSetupDao().delete(filterSetupId)
-        database.filterDao().deleteByFilterSetup(filterSetupId)
+        database.withTransaction {
+            database.filterSetupDao().delete(filterSetupId)
+            database.filterDao().deleteByFilterSetup(filterSetupId)
+        }
     }
 
     companion object {

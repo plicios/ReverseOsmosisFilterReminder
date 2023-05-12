@@ -18,10 +18,11 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import org.joda.time.LocalDate
+import pl.piotrgorny.ui.loader.Loader
 
 
 @Composable
-fun CalendarView(viewType: ViewType) {
+fun  CalendarView(viewType: ViewType) {
     val events = listOf(LocalDate(), LocalDate().minusDays(20))
     YearPicker()
     List()
@@ -87,16 +88,7 @@ fun List() {
             }
             is LoadState.Loading -> { // Pagination Loading UI
                 item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Text(text = "Pagination Loading")
-
-                        CircularProgressIndicator(color = Color.Black)
-                    }
+                    Loader(text = "Pagination Loading")
                 }
             }
             else -> {}

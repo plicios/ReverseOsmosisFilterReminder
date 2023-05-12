@@ -19,7 +19,7 @@ class AddOrModifyFilterSetupContract {
         object RequestAddFilter : Event()
         data class RequestModifyFilter(val index: Int, val filter: Filter) : Event()
         data class RequestRemoveFilter(val index: Int) : Event()
-//        object RequestRenewFilters : Event()
+        object RequestRenewFilters : Event()
 
         data class AddFilter(val filter: Filter) : Event()
         data class ModifyFilter(val index: Int, val newFilter: Filter) : Event()
@@ -56,7 +56,7 @@ class AddOrModifyFilterSetupContract {
             data class OpenAddOrModifyFilterDialog(val index: Int? = null, val filter: Filter? = null) : Navigation()
             data class OpenRemoveFilterDialog(val index: Int) : Navigation()
             data class OpenRemoveFilterSetupDialog(val filterSetupId: Long) : Navigation()
-            data class OpenRenewFiltersDialog(val filterSetupId: Long) : Navigation()
+            data class OpenRenewFiltersView(val filterSetupId: Long) : Navigation()
         }
     }
 }

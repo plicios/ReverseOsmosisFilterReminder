@@ -37,6 +37,8 @@ android {
 }
 
 dependencies {
+    implementation project(":core:ui")
+
     implementation "androidx.core:core-ktx:$core_version"
 
     //Compose
