@@ -39,4 +39,6 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
 
     implementation "joda-time:joda-time:$joda_time_version"
+
+    implementation "androidx.paging:paging-runtime:$paging_version"
 }

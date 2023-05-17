@@ -41,4 +41,7 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_material_version"
 
     implementation "joda-time:joda-time:$joda_time_version"
+
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-compose:$paging_compose_version"
 }

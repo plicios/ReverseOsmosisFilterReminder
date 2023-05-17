@@ -16,39 +16,45 @@ import pl.piotrgorny.model.FilterSetup
 class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
 
     private val database: ReverseOsmosisDatabase = Room.databaseBuilder(context, ReverseOsmosisDatabase::class.java, "reverse-osmosis-db").build()
+    private val filterSetupDao by lazy {
+        database.filterSetupDao()
+    }
+    private val filterDao by lazy {
+        database.filterDao()
+    }
     override fun getFilterSetups(): Flow<List<FilterSetup>> {
-        return database.filterSetupDao().getAll().map { list ->
+        return filterSetupDao.getAll().map { list ->
             list.map { it.toModel() }
         }
     }
 
     override fun getFilterSetup(id: Long): Flow<FilterSetup?> {
-        return database.filterSetupDao().get(id).map {
+        return filterSetupDao.get(id).map {
             it?.toModel()
         }
     }
 
     override suspend fun addFilterSetup(filterSetup: FilterSetup) {
         database.withTransaction {
-            val id = database.filterSetupDao().insert(filterSetup.toEntity()).first()
-            database.filterDao().insert(*filterSetup.filters.map { it.toEntity(id) }.toTypedArray())
+            val id = filterSetupDao.insert(filterSetup.toEntity()).first()
+            filterDao.insert(*filterSetup.filters.map { it.toEntity(id) }.toTypedArray())
         }
     }
 
     override suspend fun updateFilterSetup(filterSetup: FilterSetup) {
         filterSetup.id?.let {
             database.withTransaction {
-                database.filterSetupDao().update(filterSetup.toEntity())
-                database.filterDao().deleteByFilterSetup(it)
-                database.filterDao().insert(*filterSetup.filters.map { filter -> filter.toEntity(it) }.toTypedArray())
+                filterSetupDao.update(filterSetup.toEntity())
+                filterDao.deleteByFilterSetup(it)
+                filterDao.insert(*filterSetup.filters.map { filter -> filter.toEntity(it) }.toTypedArray())
             }
         }
     }
 
     override suspend fun deleteFilterSetup(filterSetupId: Long) {
         database.withTransaction {
-            database.filterSetupDao().delete(filterSetupId)
-            database.filterDao().deleteByFilterSetup(filterSetupId)
+            filterSetupDao.delete(filterSetupId)
+            filterDao.deleteByFilterSetup(filterSetupId)
         }
     }
 

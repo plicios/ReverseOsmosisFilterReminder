@@ -8,9 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import pl.piotrgorny.common.toLocalDate
+import pl.piotrgorny.common.toStringFromPattern
 import pl.piotrgorny.filtersetup.FilterChange
-import pl.piotrgorny.filtersetup.extensions.print
-import pl.piotrgorny.filtersetup.extensions.toDate
 import pl.piotrgorny.filtersetup.screen.AddOrModifyFilterSetupScreen
 import pl.piotrgorny.filtersetup.screen.FilterSetupsScreen
 import pl.piotrgorny.filtersetup.screen.RenewFiltersScreen
@@ -52,7 +52,7 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
                             "addOrModifyFilter?" +
                                     "index=${index}" +
                                     "&type=${filter.type.name}" +
-                                    "&installationDate=${filter.installationDate.print()}" +
+                                    "&installationDate=${filter.installationDate.toStringFromPattern()}" +
                                     "&lifeSpan=${filter.lifeSpan.name}"
                         )
                     else
@@ -115,7 +115,7 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
         ) { backStackEntry ->
             val index = backStackEntry.get("index", String::toIntOrNull)
             val type = backStackEntry.get("type", Filter.Type::valueOf)
-            val installationDate = backStackEntry.get("installationDate", String::toDate)
+            val installationDate = backStackEntry.get("installationDate", String::toLocalDate)
             val lifeSpan = backStackEntry.get("lifeSpan", Filter.LifeSpan::valueOf)
             AddOrModifyFilterDialog(
                 type = type,

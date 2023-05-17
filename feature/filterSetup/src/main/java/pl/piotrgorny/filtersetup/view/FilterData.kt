@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import pl.piotrgorny.common.toStringFromPattern
 import pl.piotrgorny.filtersetup.extensions.print
 import pl.piotrgorny.model.Filter
 
@@ -29,8 +30,8 @@ fun FilterData(filter: Filter, modifier: Modifier = Modifier) {
             Text(text = "Filter lifespan:", modifier = Modifier.layoutId("lifeSpanLabel"))
 
             Text(text = filter.type.print(), modifier = Modifier.layoutId("type"))
-            Text(text = filter.installationDate.print(), modifier = Modifier.layoutId("installationDate"))
-            Text(text = filter.expirationDate.print(), modifier = Modifier.layoutId("expirationDate"))
+            Text(text = filter.installationDate.toStringFromPattern(), modifier = Modifier.layoutId("installationDate"))
+            Text(text = filter.expirationDate.toStringFromPattern(), modifier = Modifier.layoutId("expirationDate"))
             Text(text = filter.lifeSpan.print(), modifier = Modifier.layoutId("lifeSpan"))
         }
     }

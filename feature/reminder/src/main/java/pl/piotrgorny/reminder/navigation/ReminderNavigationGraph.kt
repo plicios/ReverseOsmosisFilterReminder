@@ -1,9 +1,10 @@
-package pl.piotrgorny.reminder
+package pl.piotrgorny.reminder.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import pl.piotrgorny.reminder.view.CalendarView
 
 fun NavGraphBuilder.reminderNavigationGraph(navController: NavHostController){
     navigation(
@@ -13,7 +14,7 @@ fun NavGraphBuilder.reminderNavigationGraph(navController: NavHostController){
         composable(
             route = "calendar"
         ) {
-            CalendarView(ViewType.Months)
+            CalendarView()
         }
     }
 }
