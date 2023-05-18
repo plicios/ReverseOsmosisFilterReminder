@@ -15,7 +15,7 @@ import pl.piotrgorny.model.FilterSetup
 
 class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
 
-    private val database: ReverseOsmosisDatabase = Room.databaseBuilder(context, ReverseOsmosisDatabase::class.java, "reverse-osmosis-db").build()
+    private val database: ReverseOsmosisDatabase = Room.databaseBuilder(context, ReverseOsmosisDatabase::class.java, "reverse-osmosis-db").fallbackToDestructiveMigration().build()
     private val filterSetupDao by lazy {
         database.filterSetupDao()
     }

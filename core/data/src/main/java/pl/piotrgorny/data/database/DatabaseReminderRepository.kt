@@ -14,7 +14,7 @@ import pl.piotrgorny.model.FilterReminder
 import pl.piotrgorny.database.entity.FilterReminder as FilterReminderEntity
 
 class DatabaseReminderRepository(context: Context) : ReminderRepository {
-    private val database: ReverseOsmosisDatabase = Room.databaseBuilder(context, ReverseOsmosisDatabase::class.java, "reverse-osmosis-db").build()
+    private val database: ReverseOsmosisDatabase = Room.databaseBuilder(context, ReverseOsmosisDatabase::class.java, "reverse-osmosis-db").fallbackToDestructiveMigration().build()
     private val filterReminderDao by lazy {
         database.filterReminderDao()
     }

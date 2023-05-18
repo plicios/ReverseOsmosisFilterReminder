@@ -1,6 +1,8 @@
+import pl.piotrgorny.buildsrc.Libraries
+
 plugins {
-    id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
+    id("java-library")
+    id("org.jetbrains.kotlin.jvm")
 }
 
 java {
@@ -9,5 +11,5 @@ java {
 }
 
 dependencies {
-    implementation "joda-time:joda-time:$joda_time_version"
+    implementation(Libraries.jodaTime)
 }

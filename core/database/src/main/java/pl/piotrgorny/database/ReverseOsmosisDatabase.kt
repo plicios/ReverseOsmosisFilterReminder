@@ -12,7 +12,7 @@ import pl.piotrgorny.database.entity.Filter
 import pl.piotrgorny.database.entity.FilterReminder
 import pl.piotrgorny.database.entity.FilterSetup
 
-@Database(entities = [FilterSetup::class, Filter::class, FilterReminder::class], version = 1, exportSchema = false)
+@Database(entities = [FilterSetup::class, Filter::class, FilterReminder::class], version = 2, exportSchema = false)
 @TypeConverters(DateConverter::class, DateTimeConverter::class)
 abstract class ReverseOsmosisDatabase : RoomDatabase() {
     abstract fun filterSetupDao(): FilterSetupDao

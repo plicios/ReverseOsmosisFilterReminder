@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
             ReverseOsmosisFilterReminderTheme {
                 val navController = rememberNavController()
                 Surface {
-                    NavHost(navController = navController, startDestination = "reminder") {
+                    NavHost(navController = navController, startDestination = "filterSetup") {
                         filterSetupNavigationGraph(navController)
                         reminderNavigationGraph(navController)
                     }
