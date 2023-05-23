@@ -12,6 +12,7 @@ import pl.piotrgorny.data.database.DatabaseFilterSetupRepository
 import pl.piotrgorny.filtersetup.contract.AddOrModifyFilterSetupContract
 import pl.piotrgorny.model.Filter
 import pl.piotrgorny.model.FilterSetup
+import pl.piotrgorny.mvi.Error
 import pl.piotrgorny.mvi.MviBaseViewModel
 import java.util.*
 
@@ -41,8 +42,6 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
                         saveFilterSetup(it)
                         setEffect { AddOrModifyFilterSetupContract.Effect.Navigation.BackToFilterSetups }
                     }
-                } else {
-                    //TODO add error handling
                 }
             }
             is AddOrModifyFilterSetupContract.Event.RemoveFilterSetup -> {
@@ -57,6 +56,9 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
             }
             is AddOrModifyFilterSetupContract.Event.NameChange -> {
                 setState { copy(name = event.name) }
+                if(viewState.value.checkValidity) {
+                    validateInput()
+                }
             }
             is AddOrModifyFilterSetupContract.Event.TypeChange -> {
                 setState { copy(type = event.type) }
@@ -76,9 +78,6 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
                     event.index
                 ) }
             }
-//            is AddOrModifyFilterSetupContract.Event.RequestRenewFilters -> {
-//                setState { copy(stateType = AddOrModifyFilterSetupContract.State.Type.RenewFilters) }
-//            }
             is AddOrModifyFilterSetupContract.Event.AddFilter -> {
                 setState { copy(filters = filters + event.filter) }
             }
@@ -126,7 +125,19 @@ class AddOrModifyFilterSetupViewModel(private val filterSetupId: Long?, private 
         setState { copy(filters = filters.remove(obsoleteFilters)) }
     }
 
-    private fun validateInput() = true
+    private fun validateInput() = with(viewState.value) {
+        var valid = true
+        setState { copy(checkValidity = true).also { clearErrors() } }
+        if (name.isBlank()) {
+            setState { copy().also { setError("nameError", Error.NoValue) } }
+            valid = false
+        }
+        if (filters.isEmpty()) {
+            setState { copy().also { setError("filtersError", Error.NoValue) } }
+            valid = false
+        }
+        valid
+    }
 
     private fun renewedFilters() : List<Filter> {
         return viewState.value.filters.map {

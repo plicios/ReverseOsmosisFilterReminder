@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import pl.piotrgorny.ui.textfield.ValidationOutlinedTextField
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -12,7 +13,8 @@ fun <T> Dropdown(
     options: List<T> = emptyList(),
     optionToString: (T) -> String = { it.toString() },
     defaultValue: T? = null,
-    onSelectedOptionChange: (T) -> Unit = {}
+    onSelectedOptionChange: (T) -> Unit = {},
+    error: String? = null
 ) {
     var expanded by remember {
         mutableStateOf(false)
@@ -23,15 +25,16 @@ fun <T> Dropdown(
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
         expanded = !expanded
     }) {
-        OutlinedTextField(
+        ValidationOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
             value = selectedOptionText,
             onValueChange = {},
-            label = { Text(text = label)},
+            label = label,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
+            error = error,
             colors = ExposedDropdownMenuDefaults.textFieldColors()
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {

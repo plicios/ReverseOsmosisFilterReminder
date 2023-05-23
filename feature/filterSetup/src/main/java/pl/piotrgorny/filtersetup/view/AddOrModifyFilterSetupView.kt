@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -26,7 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import pl.piotrgorny.filtersetup.contract.AddOrModifyFilterSetupContract
 import pl.piotrgorny.model.FilterSetup
+import pl.piotrgorny.ui.ErrorMessage
 import pl.piotrgorny.ui.dropdown.Dropdown
+import pl.piotrgorny.ui.textfield.ValidationOutlinedTextField
 
 @Composable
 fun AddOrModifyFilterSetupView(
@@ -61,24 +64,26 @@ fun AddOrModifyFilterSetupView(
                 .padding(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(
-                readOnly = state.stateType == AddOrModifyFilterSetupContract.State.Type.View,
+            ValidationOutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.name,
                 onValueChange = {
                     onEventSent(AddOrModifyFilterSetupContract.Event.NameChange(it))
                 },
-                label = { Text(text = "Name") }
+                error = state.getError("nameError")?.name,
+                label = "Name",
+                readOnly = state.stateType == AddOrModifyFilterSetupContract.State.Type.View,
             )
             if (state.stateType.isEditable) {
                 Dropdown(
                     label = "Type",
                     options = FilterSetup.Type.values(),
                     defaultValue = state.type,
-                    optionToString = FilterSetup.Type::name
-                ) {
-                    onEventSent(AddOrModifyFilterSetupContract.Event.TypeChange(it))
-                }
+                    optionToString = FilterSetup.Type::name,
+                    onSelectedOptionChange = {
+                        onEventSent(AddOrModifyFilterSetupContract.Event.TypeChange(it))
+                    }
+                )
             } else {
                 OutlinedTextField(
                     readOnly = true,
@@ -97,6 +102,9 @@ fun AddOrModifyFilterSetupView(
                         Icon(Icons.Filled.Add, contentDescription = "Add filter")
                     }
                 }
+            }
+            state.getError("filtersError")?.name?.let {
+                ErrorMessage(it)
             }
             LazyColumn(modifier = Modifier
                 .fillMaxWidth()

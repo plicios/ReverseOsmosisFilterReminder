@@ -15,6 +15,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import pl.piotrgorny.ui.ErrorMessage
 import pl.piotrgorny.ui.loader.Loader
 
 
@@ -34,8 +35,11 @@ fun <T : Any> LazyPagingList(lazyPagingItems: LazyPagingItems<T>, row: @Composab
 
         when (val state = lazyPagingItems.loadState.refresh) { //FIRST LOAD
             is LoadState.Error -> {
-                //TODO Error Item
-                //state.error to get error message
+                item {
+                    state.error.message?.let {
+                        ErrorMessage(error = it)
+                    }
+                }
             }
             is LoadState.Loading -> { // Loading UI
                 item {
@@ -60,8 +64,11 @@ fun <T : Any> LazyPagingList(lazyPagingItems: LazyPagingItems<T>, row: @Composab
 
         when (val state = lazyPagingItems.loadState.append) { // Pagination
             is LoadState.Error -> {
-                //TODO Pagination Error Item
-                //state.error to get error message
+                item {
+                    state.error.message?.let {
+                        ErrorMessage(error = it)
+                    }
+                }
             }
             is LoadState.Loading -> { // Pagination Loading UI
                 item {

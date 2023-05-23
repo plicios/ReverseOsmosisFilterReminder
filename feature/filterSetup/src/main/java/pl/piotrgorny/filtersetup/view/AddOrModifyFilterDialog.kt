@@ -14,7 +14,6 @@ import pl.piotrgorny.ui.date.DateField
 import pl.piotrgorny.ui.dialog.Dialog
 import pl.piotrgorny.ui.dropdown.Dropdown
 
-
 @Composable
 fun AddOrModifyFilterDialog(
     type: Filter.Type?,
@@ -52,14 +51,16 @@ fun AddOrModifyFilterDialog(
             optionToString = Filter.Type::print,
             onSelectedOptionChange = {
                 viewModel.handleEvents(AddOrModifyFilterContract.Event.TypeChange(it))
-            }
+            },
+            error = state.getError("typeError")?.name
         )
         DateField(
             label = "Installation date",
             initialDate = state.installationDate?.toDate(),
             onDateChange = {
                 viewModel.handleEvents(AddOrModifyFilterContract.Event.InstallationDateChange(LocalDate(it)))
-            }
+            },
+            error = state.getError("installationDateError")?.name
         )
         Dropdown(
             label = "Lifespan",
@@ -68,7 +69,8 @@ fun AddOrModifyFilterDialog(
             optionToString = Filter.LifeSpan::print,
             onSelectedOptionChange = {
                 viewModel.handleEvents(AddOrModifyFilterContract.Event.LifeSpanChange(it))
-            }
+            },
+            error = state.getError("lifeSpanError")?.name
         )
     }
 }

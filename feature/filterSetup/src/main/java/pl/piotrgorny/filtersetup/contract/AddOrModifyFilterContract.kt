@@ -3,8 +3,10 @@ package pl.piotrgorny.filtersetup.contract
 import pl.piotrgorny.model.Filter
 import pl.piotrgorny.mvi.ViewEvent
 import pl.piotrgorny.mvi.ViewSideEffect
-import pl.piotrgorny.mvi.ViewState
+//import pl.piotrgorny.mvi.ViewState
 import org.joda.time.LocalDate
+import pl.piotrgorny.mvi.ValidationViewState
+//import pl.piotrgorny.ui.Error
 
 class AddOrModifyFilterContract {
     sealed class Event : ViewEvent {
@@ -18,15 +20,19 @@ class AddOrModifyFilterContract {
         val type: Filter.Type? = null,
         val lifeSpan: Filter.LifeSpan? = null,
         val installationDate: LocalDate? = null,
-        val stateType: Type
-    ) : ViewState {
+//        val typeError: Error? = null,
+//        val lifeSpanError: Error? = null,
+//        val installationDateError: Error? = null,
+        val stateType: Type,
+        override val checkValidity: Boolean = false
+    ) : ValidationViewState() {
         constructor(type: Filter.Type? = null,
                     lifeSpan: Filter.LifeSpan? = null,
                     installationDate: LocalDate? = null) :
-                this(type,
-                    lifeSpan,
-                    installationDate,
-                    if(type != null && lifeSpan != null && installationDate != null) Type.Edit else Type.Add
+                this(type = type,
+                    lifeSpan = lifeSpan,
+                    installationDate = installationDate,
+                    stateType = if(type != null && lifeSpan != null && installationDate != null) Type.Edit else Type.Add
                 )
         enum class Type{
             Add,

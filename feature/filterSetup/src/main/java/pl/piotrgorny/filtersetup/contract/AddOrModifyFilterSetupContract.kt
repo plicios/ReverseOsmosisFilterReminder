@@ -2,6 +2,7 @@ package pl.piotrgorny.filtersetup.contract
 
 import pl.piotrgorny.model.Filter
 import pl.piotrgorny.model.FilterSetup
+import pl.piotrgorny.mvi.ValidationViewState
 import pl.piotrgorny.mvi.ViewEvent
 import pl.piotrgorny.mvi.ViewSideEffect
 import pl.piotrgorny.mvi.ViewState
@@ -32,8 +33,9 @@ class AddOrModifyFilterSetupContract {
         val type: FilterSetup.Type = FilterSetup.Type.Custom,
         val filters: List<Filter> = emptyList(),
         val isLoading: Boolean = false,
-        val stateType: Type = Type.Add
-    ) : ViewState {
+        val stateType: Type = Type.Add,
+        override val checkValidity: Boolean = false
+    ) : ValidationViewState() {
         constructor(filterSetup: FilterSetup) :
                 this(filterSetup.name,
                     filterSetup.type,

@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import org.joda.time.LocalDate
+import pl.piotrgorny.ui.textfield.ValidationOutlinedTextField
 import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -24,7 +25,8 @@ fun DateField(
     minDate: Date? = null,
     maxDate: Date? = null,
     datePattern: String = "dd-MM-yyyy",
-    onDateChange: (Date) -> Unit = {}
+    onDateChange: (Date) -> Unit = {},
+    error: String? = null
 ) {
     var date by remember {
         mutableStateOf(initialDate?.let{LocalDate(it)})
@@ -47,13 +49,12 @@ fun DateField(
         val source = remember {
             MutableInteractionSource()
         }
-        OutlinedTextField(
-            label = {
-                Text(text = label)
-            },
-            readOnly = true,
+        ValidationOutlinedTextField(
             value = date?.toString(datePattern) ?: "Input date",
             onValueChange = {},
+            error = error,
+            readOnly = true,
+            label = label,
             interactionSource = source,
             colors = ExposedDropdownMenuDefaults.textFieldColors()
         )
