@@ -10,7 +10,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pl.piotrgorny.filtersetup.R
 import pl.piotrgorny.filtersetup.contract.FilterSetupsContract
 import pl.piotrgorny.model.FilterSetup
 import pl.piotrgorny.ui.loader.Loader
@@ -22,7 +24,7 @@ fun FilterSetupsView(
 ) {
     when {
         state.isLoading -> {
-            Loader("Loading filter setups")
+            Loader(stringResource(id = R.string.loading_filter_setups))
         }
         state.filterSetups.isEmpty() -> {
             Scaffold {
@@ -31,11 +33,11 @@ fun FilterSetupsView(
                     verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "No filter setups available")
+                    Text(text = stringResource(id = R.string.no_filter_setups))
                     Button(
                         modifier = Modifier,
                         onClick = { onEventSent(FilterSetupsContract.Event.AddFilterSetup) }) {
-                        Text(text = "Add new")
+                        Text(text = stringResource(id = R.string.add_filter_setup))
                     }
                 }
             }
@@ -46,7 +48,7 @@ fun FilterSetupsView(
                     FloatingActionButton(onClick = { onEventSent(FilterSetupsContract.Event.AddFilterSetup) }) {
                         Icon(
                             Icons.Filled.Add,
-                            contentDescription = "Add setup"
+                            contentDescription = stringResource(id = R.string.add_filter_setup)
                         )
                     }
                 },

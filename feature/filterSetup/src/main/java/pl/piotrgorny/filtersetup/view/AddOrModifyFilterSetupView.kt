@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -24,8 +23,11 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pl.piotrgorny.filtersetup.R
 import pl.piotrgorny.filtersetup.contract.AddOrModifyFilterSetupContract
+import pl.piotrgorny.filtersetup.extensions.print
 import pl.piotrgorny.model.FilterSetup
 import pl.piotrgorny.ui.ErrorMessage
 import pl.piotrgorny.ui.dropdown.Dropdown
@@ -41,17 +43,17 @@ fun AddOrModifyFilterSetupView(
             TopAppBar {
                 if(state.stateType.canSwitchToEdit) {
                     IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestModifyFilterSetup) }) {
-                        Icon(Icons.Filled.Edit, "edit filter setup")
+                        Icon(Icons.Filled.Edit, stringResource(id = R.string.edit_filter_setup))
                     }
                 }
                 if(state.stateType.canDelete) {
                     IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRemoveFilterSetup) }) {
-                        Icon(Icons.Filled.Delete, "delete filter setup")
+                        Icon(Icons.Filled.Delete, stringResource(id = R.string.remove_filter_setup))
                     }
                 }
                 if(state.stateType.canSwitchToRenew) {
                     IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestRenewFilters) }) {
-                        Icon(Icons.Filled.Refresh, "Renew filters")
+                        Icon(Icons.Filled.Refresh, stringResource(id = R.string.renew_filters))
                     }
                 }
             }
@@ -71,15 +73,15 @@ fun AddOrModifyFilterSetupView(
                     onEventSent(AddOrModifyFilterSetupContract.Event.NameChange(it))
                 },
                 error = state.getError("nameError")?.name,
-                label = "Name",
+                label = stringResource(id = R.string.name),
                 readOnly = state.stateType == AddOrModifyFilterSetupContract.State.Type.View,
             )
             if (state.stateType.isEditable) {
                 Dropdown(
-                    label = "Type",
+                    label = stringResource(id = R.string.type),
                     options = FilterSetup.Type.values(),
                     defaultValue = state.type,
-                    optionToString = FilterSetup.Type::name,
+                    optionToString = { it.print() },
                     onSelectedOptionChange = {
                         onEventSent(AddOrModifyFilterSetupContract.Event.TypeChange(it))
                     }
@@ -88,18 +90,18 @@ fun AddOrModifyFilterSetupView(
                 OutlinedTextField(
                     readOnly = true,
                     modifier = Modifier.fillMaxWidth(),
-                    value = state.type.name,
-                    label = { Text(text = "Type") },
+                    value = state.type.print(),
+                    label = { Text(text = stringResource(id = R.string.type)) },
                     onValueChange = {}
                 )
             }
 
             Row(modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Filters")
+                Text(text = stringResource(id = R.string.filters))
                 if(state.stateType.isEditable) {
                     IconButton(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.RequestAddFilter) }) {
-                        Icon(Icons.Filled.Add, contentDescription = "Add filter")
+                        Icon(Icons.Filled.Add, contentDescription = stringResource(id = R.string.add_filter))
                     }
                 }
             }
@@ -126,9 +128,9 @@ fun AddOrModifyFilterSetupView(
             if(state.stateType != AddOrModifyFilterSetupContract.State.Type.View){
                 Button(onClick = { onEventSent(AddOrModifyFilterSetupContract.Event.AddOrModifyFilterSetup) }) {
                     if(state.stateType == AddOrModifyFilterSetupContract.State.Type.Add)
-                        Text(text = "Add filter setup")
+                        Text(text = stringResource(id = R.string.add_filter_setup))
                     else
-                        Text(text = "Modify filter setup")
+                        Text(text = stringResource(id = R.string.edit_filter_setup))
                 }
             }
         }

@@ -11,7 +11,7 @@ import pl.piotrgorny.ui.textfield.ValidationOutlinedTextField
 fun <T> Dropdown(
     label: String = "Label",
     options: List<T> = emptyList(),
-    optionToString: (T) -> String = { it.toString() },
+    optionToString: @Composable (T) -> String = { it.toString() },
     defaultValue: T? = null,
     onSelectedOptionChange: (T) -> Unit = {},
     error: String? = null
@@ -19,9 +19,11 @@ fun <T> Dropdown(
     var expanded by remember {
         mutableStateOf(false)
     }
-    var selectedOptionText by remember {
-        mutableStateOf(defaultValue?.let(optionToString) ?: "")
+    var selectedOption by remember {
+        mutableStateOf(defaultValue)
     }
+    val selectedOptionText = defaultValue?.let { optionToString(it) } ?: ""
+
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {
         expanded = !expanded
     }) {
@@ -40,7 +42,7 @@ fun <T> Dropdown(
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach {
                 DropdownMenuItem(onClick = {
-                    selectedOptionText = optionToString(it)
+                    selectedOption = it
                     onSelectedOptionChange(it)
                     expanded = false
                 }) {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add">Dodaj</string>
+    <string name="edit">Edytuj</string>
+    <string name="remove">Usuń</string>
+    <string name="type">Typ</string>
+    <string name="installation_date">Data instalacji</string>
+    <string name="expiration_date">Data ważności</string>
+    <string name="lifespan">Żywotność</string>
+    <string name="name">Nazwa</string>
+    <string name="add_filter">Dodaj filtr</string>
+    <string name="edit_filter">Edytuj filtr</string>
+    <string name="remove_filter">Usuń filtr</string>
+    <string name="sure_to_remove_filter">Czy na pewno chcesz usunąć filtr?</string>
+    <string name="loading_filter_setups">Ładowanie systemów filtrujących</string>
+    <string name="no_filter_setups">Brak dostępnych systemów filtrujących</string>
+    <string name="filters">Filtry</string>
+    <string name="add_filter_setup">Dodaj system filtrujący</string>
+    <string name="edit_filter_setup">Edytuj system filtrujący</string>
+    <string name="remove_filter_setup">Usuń system filtrujący</string>
+    <string name="renew_filters">Odnów filtry</string>
+    <string name="sure_to_remove_filter_setup">Czy na pewno chcesz usunąć system filtrujący?</string>
+    <string name="one_week">Tydzień</string>
+    <string name="two_weeks">Dwa tygodnie</string>
+    <string name="three_weeks">Trzy tygodnie</string>
+    <string name="one_month">Miesiąc</string>
+    <string name="two_months">Dwa miesiące</string>
+    <string name="three_months">Trzy miesiące</string>
+    <string name="half_year">Pół roku</string>
+    <string name="one_year">Rok</string>
+    <string name="sediment_filter">Wkład sedymentacyjny %1$d mikron</string>
+    <string name="carbon_filter">Wkład węglowy blokowy</string>
+    <string name="semipermeable_membrane">Membrana osmotyczna</string>
+    <string name="inline_carbon_filter">Wkład węglowy liniowy</string>
+    <string name="ionizing_filter">Wkład jonizujący</string>
+    <string name="bio_ceramic_filter">Wkład bioceramiczny</string>
+    <string name="mineralizing_filter">Mineralizator</string>
+    <string name="two_years">Dwa lata</string>
+    <string name="three_years">Trzy lata</string>
+    <string name="aquarius">Akwarystyczny</string>
+    <string name="custom">Własny</string>
+</resources>

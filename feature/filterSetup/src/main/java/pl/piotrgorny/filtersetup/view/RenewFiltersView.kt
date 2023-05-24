@@ -23,7 +23,9 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pl.piotrgorny.filtersetup.R
 import pl.piotrgorny.filtersetup.contract.FilterSetupsContract
 import pl.piotrgorny.filtersetup.contract.RenewFiltersContract
 import pl.piotrgorny.model.Filter
@@ -38,7 +40,7 @@ fun RenewFiltersView(
             FloatingActionButton(onClick = { onEventSent(RenewFiltersContract.Event.RenewFilters) }) {
                 Icon(
                     Icons.Filled.Refresh,
-                    contentDescription = "refresh selected filters"
+                    contentDescription = stringResource(id = R.string.renew_filters)
                 )
             }
         },
@@ -56,7 +58,7 @@ fun RenewFiltersView(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.filterSetup?.name ?: "",
                 onValueChange = {},
-                label = { Text(text = "Name") }
+                label = { Text(text = stringResource(id = R.string.name)) }
             )
             LazyColumn {
                 items(state.filterSelection) {

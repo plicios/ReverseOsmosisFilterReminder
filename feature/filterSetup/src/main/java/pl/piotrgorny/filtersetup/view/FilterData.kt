@@ -9,11 +9,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import pl.piotrgorny.common.toStringFromPattern
+import pl.piotrgorny.filtersetup.R
 import pl.piotrgorny.filtersetup.extensions.print
 import pl.piotrgorny.model.Filter
 
@@ -24,10 +26,10 @@ fun FilterData(filter: Filter, modifier: Modifier = Modifier) {
         ConstraintLayout(constraints,
             modifier = Modifier.padding(start = 15.dp, bottom = 15.dp)) {
 
-            Text(text = "Type:", modifier = Modifier.layoutId("typeLabel"))
-            Text(text = "Installation date:", modifier = Modifier.layoutId("installationDateLabel"))
-            Text(text = "Expiration date:", modifier = Modifier.layoutId("expirationDateLabel"))
-            Text(text = "Filter lifespan:", modifier = Modifier.layoutId("lifeSpanLabel"))
+            Text(text = stringResource(id = R.string.type) + ":", modifier = Modifier.layoutId("typeLabel"))
+            Text(text = stringResource(id = R.string.installation_date) + ":", modifier = Modifier.layoutId("installationDateLabel"))
+            Text(text = stringResource(id = R.string.expiration_date) + ":", modifier = Modifier.layoutId("expirationDateLabel"))
+            Text(text = stringResource(id = R.string.lifespan) + ":", modifier = Modifier.layoutId("lifeSpanLabel"))
 
             Text(text = filter.type.print(), modifier = Modifier.layoutId("type"))
             Text(text = filter.installationDate.toStringFromPattern(), modifier = Modifier.layoutId("installationDate"))

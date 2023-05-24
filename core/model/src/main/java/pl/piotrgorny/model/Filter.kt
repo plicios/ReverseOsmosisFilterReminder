@@ -130,6 +130,8 @@ data class Filter(
         Two_Months(Months.TWO),
         Three_Months(Months.THREE),
         Half_Year(Months.SIX),
-        One_Year(Years.ONE)
+        One_Year(Years.ONE),
+        Two_Years(Years.TWO),
+        Three_Years(Years.THREE)
     }
 }
