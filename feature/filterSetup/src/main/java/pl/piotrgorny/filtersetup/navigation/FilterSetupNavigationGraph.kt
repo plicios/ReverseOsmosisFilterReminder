@@ -3,13 +3,10 @@ package pl.piotrgorny.filtersetup.navigation
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
-import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import pl.piotrgorny.common.toLocalDate
-import pl.piotrgorny.common.toStringFromPattern
 import pl.piotrgorny.filtersetup.FilterChange
 import pl.piotrgorny.filtersetup.screen.AddOrModifyFilterSetupScreen
 import pl.piotrgorny.filtersetup.screen.FilterSetupsScreen
@@ -22,50 +19,40 @@ import pl.piotrgorny.navigation.GetResult
 import pl.piotrgorny.navigation.GetResultOnce
 import pl.piotrgorny.navigation.popBackStackWithResult
 
+
 fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController){
     navigation(
-        route = "filterSetup",
-        startDestination = "filterSetups"
+        route = NavigationRoutes.graphRoute,
+        startDestination = NavigationRoutes.Screen.FilterSetups
     ) {
-        composable(route = "filterSetups") {
+        composable(route = NavigationRoutes.Screen.FilterSetups) {
             FilterSetupsScreen(
-                navigateToAddFilterSetup = { navController.navigate("addOrModifyFilterSetup") },
-                navigateToFilterSetupDetails = { navController.navigate("addOrModifyFilterSetup?filterSetupId=${it.id}") }
+                navigateToAddOrModifyFilterSetup = { navController.navigate(NavigationRoutes.Screen.AddOrModifyFilterSetup.getRouteForParams(
+                    it?.id
+                )) }
             )
         }
         composable(
-            route = "addOrModifyFilterSetup?filterSetupId={filterSetupId}",
-            arguments = listOf(
-                navArgument("filterSetupId") {
-                    type = NavType.StringType
-                    nullable = true
-                }
-            )
+            route = NavigationRoutes.Screen.AddOrModifyFilterSetup.route,
+            arguments = NavigationRoutes.Screen.AddOrModifyFilterSetup.arguments
         ) { backStackEntry ->
-            val filterSetupId = backStackEntry.get("filterSetupId", String::toLongOrNull)
+            val filterSetupId = backStackEntry.get(NavigationRoutes.Screen.AddOrModifyFilterSetup.filterSetupIdArgument, String::toLongOrNull)
             AddOrModifyFilterSetupScreen(
                 filterSetupId = filterSetupId,
-                navigateBackToList = { navController.popBackStack("filterSetups", false) },
+                navigateBackToList = { navController.popBackStack(NavigationRoutes.Screen.FilterSetups, false) },
                 openAddOrModifyFilterDialog = {index, filter ->
-                    if (filter != null && index != null)
-                        navController.navigate(
-                            "addOrModifyFilter?" +
-                                    "index=${index}" +
-                                    "&type=${filter.type.name}" +
-                                    "&installationDate=${filter.installationDate.toStringFromPattern()}" +
-                                    "&lifeSpan=${filter.lifeSpan.name}"
-                        )
-                    else
-                        navController.navigate("addOrModifyFilter")
+                    navController.navigate(
+                        NavigationRoutes.Screen.AddOrModifyFilter.getRouteForParams(filter, index)
+                    )
                 },
                 openRemoveFilterDialog = {
-                    navController.navigate("removeFilter/${it}")
+                    navController.navigate(NavigationRoutes.Dialog.RemoveFilter.getRouteForParams(it))
                 },
                 openRemoveFilterSetupDialog = {
-                    navController.navigate("removeFilterSetup/${it}")
+                    navController.navigate(NavigationRoutes.Dialog.RemoveFilterSetup.getRouteForParams(it))
                 },
                 openRenewFiltersView = {
-                    navController.navigate("renewFilters/${it}")
+                    navController.navigate(NavigationRoutes.Screen.RenewFilters.getRouteForParams(it))
                 },
                 getFilterChanges = {
                     navController.GetResult(key = "filterChange", onResult = it)
@@ -76,14 +63,10 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
             )
         }
         composable(
-            route = "renewFilters/{filterSetupId}",
-            arguments = listOf(
-                navArgument("filterSetupId") {
-                    type = NavType.LongType
-                }
-            )
+            route = NavigationRoutes.Screen.RenewFilters.route,
+            arguments = NavigationRoutes.Screen.RenewFilters.arguments
         ) { backStackEntry ->
-            backStackEntry.arguments?.getLong("filterSetupId")?.let {
+            backStackEntry.arguments?.getLong(NavigationRoutes.Screen.RenewFilters.filterSetupIdArgument)?.let {
                 RenewFiltersScreen(
                     filterSetupId = it,
                     navigateBackToFilterSetupDetails = {
@@ -93,30 +76,13 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
             }
         }
         dialog(
-            route = "addOrModifyFilter?index={index}&type={type}&installationDate={installationDate}&lifeSpan={lifeSpan}",
-            arguments = listOf(
-                navArgument("index") {
-                    type = NavType.StringType
-                    nullable = true
-                },
-                navArgument("type") {
-                    type = NavType.StringType
-                    nullable = true
-                },
-                navArgument("installationDate") {
-                    type = NavType.StringType
-                    nullable = true
-                },
-                navArgument("lifeSpan") {
-                    type = NavType.StringType
-                    nullable = true
-                },
-            )
+            route = NavigationRoutes.Screen.AddOrModifyFilter.route,
+            arguments = NavigationRoutes.Screen.AddOrModifyFilter.arguments
         ) { backStackEntry ->
-            val index = backStackEntry.get("index", String::toIntOrNull)
-            val type = backStackEntry.get("type", Filter.Type::valueOf)
-            val installationDate = backStackEntry.get("installationDate", String::toLocalDate)
-            val lifeSpan = backStackEntry.get("lifeSpan", Filter.LifeSpan::valueOf)
+            val index = backStackEntry.get(NavigationRoutes.Screen.AddOrModifyFilter.indexArgument, String::toIntOrNull)
+            val type = backStackEntry.get(NavigationRoutes.Screen.AddOrModifyFilter.typeArgument, Filter.Type::valueOf)
+            val installationDate = backStackEntry.get(NavigationRoutes.Screen.AddOrModifyFilter.installationDateArgument, String::toLocalDate)
+            val lifeSpan = backStackEntry.get(NavigationRoutes.Screen.AddOrModifyFilter.lifeSpanArgument, Filter.LifeSpan::valueOf)
             AddOrModifyFilterDialog(
                 type = type,
                 installationDate = installationDate,
@@ -131,14 +97,10 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
             )
         }
         dialog(
-            route = "removeFilter/{index}",
-            arguments = listOf(
-                navArgument("index") {
-                    type = NavType.IntType
-                }
-            )
+            route = NavigationRoutes.Dialog.RemoveFilter.route,
+            arguments = NavigationRoutes.Dialog.RemoveFilter.arguments
         ) { backStackEntry ->
-            backStackEntry.arguments?.getInt("index")?.let {
+            backStackEntry.arguments?.getInt(NavigationRoutes.Dialog.RemoveFilter.indexArgument)?.let {
                 RemoveFilterDialog(
                     onDismiss = {
                         navController.popBackStack()
@@ -150,14 +112,10 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
             }
         }
         dialog(
-            route = "removeFilterSetup/{filterSetupId}",
-            arguments = listOf(
-                navArgument("filterSetupId") {
-                    type = NavType.LongType
-                }
-            )
+            route = NavigationRoutes.Dialog.RemoveFilterSetup.route,
+            arguments = NavigationRoutes.Dialog.RemoveFilterSetup.arguments
         ) { backStackEntry ->
-            backStackEntry.arguments?.getLong("filterSetupId")?.let {
+            backStackEntry.arguments?.getLong(NavigationRoutes.Dialog.RemoveFilterSetup.filterSetupIdArgument)?.let {
                 RemoveFilterSetupDialog(
                     onDismiss = {
                         navController.popBackStack()

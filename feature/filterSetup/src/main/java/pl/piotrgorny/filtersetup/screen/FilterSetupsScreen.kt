@@ -13,8 +13,7 @@ import pl.piotrgorny.model.FilterSetup
 
 @Composable
 fun FilterSetupsScreen(
-    navigateToAddFilterSetup: () -> Unit,
-    navigateToFilterSetupDetails: (FilterSetup) -> Unit
+    navigateToAddOrModifyFilterSetup: (FilterSetup?) -> Unit,
 ) {
     val viewModel: FilterSetupsViewModel = viewModel(factory = FilterSetupsViewModel.Factory(
         LocalContext.current))
@@ -24,9 +23,9 @@ fun FilterSetupsScreen(
         viewModel.effect.onEach { effect ->
             when (effect) {
                 is FilterSetupsContract.Effect.Navigation.ToFilterSetupDetails ->
-                    navigateToFilterSetupDetails(effect.filterSetup)
+                    navigateToAddOrModifyFilterSetup(effect.filterSetup)
                 is FilterSetupsContract.Effect.Navigation.ToAddFilterSetup ->
-                    navigateToAddFilterSetup()
+                    navigateToAddOrModifyFilterSetup(null)
             }
         }.collect()
     }

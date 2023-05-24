@@ -8,11 +8,11 @@ import pl.piotrgorny.reminder.view.CalendarView
 
 fun NavGraphBuilder.reminderNavigationGraph(navController: NavHostController){
     navigation(
-        route = "reminder",
-        startDestination = "calendar"
+        route = NavigationRoutes.graphRoute,
+        startDestination = NavigationRoutes.Screen.Calendar
     ) {
         composable(
-            route = "calendar"
+            route = NavigationRoutes.Screen.Calendar
         ) {
             CalendarView()
         }
