@@ -23,16 +23,16 @@ fun Filter.Type.print() : String {
 @Composable
 fun Filter.LifeSpan.print() : String {
     return when(this){
-        Filter.LifeSpan.One_Week -> stringResource(id = R.string.one_week)
-        Filter.LifeSpan.Two_Weeks -> stringResource(id = R.string.two_weeks)
-        Filter.LifeSpan.Three_Weeks -> stringResource(id = R.string.three_weeks)
-        Filter.LifeSpan.One_Month -> stringResource(id = R.string.one_month)
-        Filter.LifeSpan.Two_Months -> stringResource(id = R.string.two_months)
-        Filter.LifeSpan.Three_Months -> stringResource(id = R.string.three_months)
-        Filter.LifeSpan.Half_Year -> stringResource(id = R.string.half_year)
-        Filter.LifeSpan.One_Year -> stringResource(id = R.string.one_year)
-        Filter.LifeSpan.Two_Years -> stringResource(id = R.string.two_years)
-        Filter.LifeSpan.Three_Years -> stringResource(id = R.string.three_years)
+        Filter.LifeSpan.OneWeek -> stringResource(id = R.string.one_week)
+        Filter.LifeSpan.TwoWeeks -> stringResource(id = R.string.two_weeks)
+        Filter.LifeSpan.ThreeWeeks -> stringResource(id = R.string.three_weeks)
+        Filter.LifeSpan.OneMonth -> stringResource(id = R.string.one_month)
+        Filter.LifeSpan.TwoMonths -> stringResource(id = R.string.two_months)
+        Filter.LifeSpan.ThreeMonths -> stringResource(id = R.string.three_months)
+        Filter.LifeSpan.HalfYear -> stringResource(id = R.string.half_year)
+        Filter.LifeSpan.OneYear -> stringResource(id = R.string.one_year)
+        Filter.LifeSpan.TwoYears -> stringResource(id = R.string.two_years)
+        Filter.LifeSpan.ThreeYears -> stringResource(id = R.string.three_years)
     }
 }
 

@@ -15,7 +15,7 @@ data class Filter(
     val lifeSpan: LifeSpan
 ) : Parcelable {
     constructor(type: Type) : this(
-        type, LocalDate(), LifeSpan.Half_Year
+        type, LocalDate(), LifeSpan.HalfYear
     )
 
     val expirationDate : LocalDate
@@ -25,6 +25,7 @@ data class Filter(
         get() = expirationDate.isBefore(LocalDate())
     @Parcelize
     sealed class Type : Parcelable {
+        @Suppress("ClassName")
         @Parcelize
         sealed class Sediment(val micronValue: Int) : Type() {
             object SedimentPS_20 : Sediment(20)
@@ -122,15 +123,15 @@ data class Filter(
     }
 
     enum class LifeSpan(val period: ReadablePeriod) {
-        One_Week(Weeks.ONE),
-        Two_Weeks(Weeks.TWO),
-        Three_Weeks(Weeks.THREE),
-        One_Month(Months.ONE),
-        Two_Months(Months.TWO),
-        Three_Months(Months.THREE),
-        Half_Year(Months.SIX),
-        One_Year(Years.ONE),
-        Two_Years(Years.TWO),
-        Three_Years(Years.THREE)
+        OneWeek(Weeks.ONE),
+        TwoWeeks(Weeks.TWO),
+        ThreeWeeks(Weeks.THREE),
+        OneMonth(Months.ONE),
+        TwoMonths(Months.TWO),
+        ThreeMonths(Months.THREE),
+        HalfYear(Months.SIX),
+        OneYear(Years.ONE),
+        TwoYears(Years.TWO),
+        ThreeYears(Years.THREE)
     }
 }

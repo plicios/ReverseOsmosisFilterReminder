@@ -64,5 +64,5 @@ fun FilterRow(
 @Preview
 @Composable
 fun FilterRowPreview(){
-    FilterRow(filter = Filter(Filter.Type.InlineCarbon, LocalDate(), Filter.LifeSpan.Half_Year))
+    FilterRow(filter = Filter(Filter.Type.InlineCarbon, LocalDate(), Filter.LifeSpan.HalfYear))
 }
