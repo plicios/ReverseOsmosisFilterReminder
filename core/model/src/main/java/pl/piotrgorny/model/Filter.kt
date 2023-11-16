@@ -32,12 +32,7 @@ data class Filter(
             object SedimentPS_5 : Sediment(5)
             object SedimentPS_1 : Sediment(1)
 
-            object Any : Sediment(-1) {
-                override fun equals(other: kotlin.Any?): Boolean {
-                    if(other is Sediment) return true
-                    return super.equals(other)
-                }
-            }
+            object Any : Sediment(-1)
 
             override val name: String
                 get() = "Sediment:$micronValue"
@@ -45,6 +40,12 @@ data class Filter(
             override fun equals(other: kotlin.Any?): Boolean {
                 if(other is Any) return true
                 return super.equals(other)
+            }
+
+            override fun hashCode(): Int {
+                var result = super.hashCode()
+                result = 31 * result + micronValue
+                return result
             }
         }
         object Carbon : Type() {
@@ -109,8 +110,6 @@ data class Filter(
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other !is Type) return false
-
-            other as Type
 
             if (name != other.name) return false
 

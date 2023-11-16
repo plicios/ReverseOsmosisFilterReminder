@@ -212,9 +212,9 @@ class FilterSetupTest {
         missingFilterTypesTest(
             FilterSetup(FilterSetup.Type.RO4(), listOf()),
             listOf(
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.Carbon,
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.SemiPermeableMembrane
             )
         )
@@ -225,9 +225,9 @@ class FilterSetupTest {
         missingFilterTypesTest(
             FilterSetup(FilterSetup.Type.RO5(), listOf()),
             listOf(
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.Carbon,
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.SemiPermeableMembrane,
                 Filter.Type.InlineCarbon
             )
@@ -239,9 +239,9 @@ class FilterSetupTest {
         missingFilterTypesTest(
             FilterSetup(FilterSetup.Type.RO6(), listOf()),
             listOf(
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.Carbon,
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.SemiPermeableMembrane,
                 Filter.Type.InlineCarbon,
                 Filter.Type.Mineralizing
@@ -254,9 +254,9 @@ class FilterSetupTest {
         missingFilterTypesTest(
             FilterSetup(FilterSetup.Type.RO7(), listOf()),
             listOf(
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.Carbon,
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.SemiPermeableMembrane,
                 Filter.Type.InlineCarbon,
                 Filter.Type.Mineralizing,
@@ -270,9 +270,9 @@ class FilterSetupTest {
         missingFilterTypesTest(
             FilterSetup(FilterSetup.Type.RO8(), listOf()),
             listOf(
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.Carbon,
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.SemiPermeableMembrane,
                 Filter.Type.InlineCarbon,
                 Filter.Type.Mineralizing,
@@ -287,9 +287,9 @@ class FilterSetupTest {
         missingFilterTypesTest(
             FilterSetup(FilterSetup.Type.RO9, listOf()),
             listOf(
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.Carbon,
-                Filter.Type.Sediment.SedimentPS_1,
+                Filter.Type.Sediment.Any,
                 Filter.Type.SemiPermeableMembrane,
                 Filter.Type.InlineCarbon,
                 Filter.Type.Mineralizing,
