@@ -1,5 +1,6 @@
 package pl.piotrgorny.filtersetup.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,7 +21,7 @@ import pl.piotrgorny.navigation.GetResultOnce
 import pl.piotrgorny.navigation.popBackStackWithResult
 
 
-fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController){
+fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController, otherNavigationTrees: @Composable () -> Unit = {}){
     navigation(
         route = NavigationRoutes.graphRoute,
         startDestination = NavigationRoutes.Screen.FilterSetups
@@ -29,7 +30,8 @@ fun NavGraphBuilder.filterSetupNavigationGraph(navController: NavHostController)
             FilterSetupsScreen(
                 navigateToAddOrModifyFilterSetup = { navController.navigate(NavigationRoutes.Screen.AddOrModifyFilterSetup.getRouteForParams(
                     it?.id
-                )) }
+                )) },
+                otherNavigationTrees
             )
         }
         composable(

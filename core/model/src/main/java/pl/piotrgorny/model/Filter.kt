@@ -10,10 +10,16 @@ import org.joda.time.Years
 
 @Parcelize
 data class Filter(
+    val id: Long?,
     val type: Type,
     val installationDate: LocalDate,
     val lifeSpan: LifeSpan
 ) : Parcelable {
+    constructor(type: Type,
+                installationDate: LocalDate,
+                lifeSpan: LifeSpan) : this(
+        null, type, installationDate, lifeSpan
+    )
     constructor(type: Type) : this(
         type, LocalDate(), LifeSpan.Half_Year
     )

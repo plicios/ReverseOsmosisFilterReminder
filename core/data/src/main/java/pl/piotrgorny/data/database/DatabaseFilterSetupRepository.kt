@@ -34,6 +34,12 @@ class DatabaseFilterSetupRepository(context: Context) : FilterSetupRepository {
         }
     }
 
+    override fun getFilters(): Flow<List<Filter>> {
+        return filterDao.getAll().map { list ->
+            list.map { it.toModel() }
+        }
+    }
+
     override suspend fun addFilterSetup(filterSetup: FilterSetup) {
         database.withTransaction {
             val id = filterSetupDao.insert(filterSetup.toEntity()).first()
@@ -79,6 +85,7 @@ fun FilterSetupWithFilters.toModel() = FilterSetup(
 )
 
 fun FilterEntity.toModel() = Filter(
+    uid,
     Filter.Type.valueOf(type),
     installationDate,
     Filter.LifeSpan.valueOf(lifeSpan)
@@ -98,4 +105,8 @@ fun Filter.toEntity(setupId: Long) = FilterEntity(
     type.name,
     lifeSpan.name,
     installationDate
-)
+).apply {
+    id?.let {
+        uid = it
+    }
+}

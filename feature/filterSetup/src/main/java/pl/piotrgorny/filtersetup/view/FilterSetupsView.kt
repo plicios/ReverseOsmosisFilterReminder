@@ -20,16 +20,25 @@ import pl.piotrgorny.ui.loader.Loader
 @Composable
 fun FilterSetupsView(
     state: FilterSetupsContract.State,
-    onEventSent: (event: FilterSetupsContract.Event) -> Unit
+    onEventSent: (event: FilterSetupsContract.Event) -> Unit,
+    otherNavigationTrees: @Composable () -> Unit = {}
 ) {
     when {
         state.isLoading -> {
             Loader(stringResource(id = R.string.loading_filter_setups))
         }
         state.filterSetups.isEmpty() -> {
-            Scaffold {
+            Scaffold(
+                topBar = {
+                    TopAppBar {
+                        otherNavigationTrees()
+                    }
+                }
+            ) {
                 Column(
-                    modifier = Modifier.padding(it).fillMaxSize(),
+                    modifier = Modifier
+                        .padding(it)
+                        .fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -44,6 +53,11 @@ fun FilterSetupsView(
         }
         else -> {
             Scaffold(
+                topBar = {
+                    TopAppBar {
+                        otherNavigationTrees()
+                    }
+                },
                 floatingActionButton = {
                     FloatingActionButton(onClick = { onEventSent(FilterSetupsContract.Event.AddFilterSetup) }) {
                         Icon(
@@ -54,7 +68,10 @@ fun FilterSetupsView(
                 },
                 floatingActionButtonPosition = FabPosition.End
             ) {
-                Column(modifier = Modifier.padding(it).fillMaxSize().padding(15.dp)) {
+                Column(modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize()
+                    .padding(15.dp)) {
                     FilterSetupsList(filterSetups = state.filterSetups) { filterSetup ->
                         onEventSent(FilterSetupsContract.Event.FilterSetupSelection(filterSetup))
                     }

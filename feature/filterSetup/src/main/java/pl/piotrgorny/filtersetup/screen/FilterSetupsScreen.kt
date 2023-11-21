@@ -14,6 +14,7 @@ import pl.piotrgorny.model.FilterSetup
 @Composable
 fun FilterSetupsScreen(
     navigateToAddOrModifyFilterSetup: (FilterSetup?) -> Unit,
+    otherNavigationTrees: @Composable () -> Unit = {}
 ) {
     val viewModel: FilterSetupsViewModel = viewModel(factory = FilterSetupsViewModel.Factory(
         LocalContext.current))
@@ -32,6 +33,7 @@ fun FilterSetupsScreen(
 
     FilterSetupsView(
         state = state,
-        onEventSent = { event -> viewModel.setEvent(event) }
+        onEventSent = { event -> viewModel.setEvent(event) },
+        otherNavigationTrees
     )
 }

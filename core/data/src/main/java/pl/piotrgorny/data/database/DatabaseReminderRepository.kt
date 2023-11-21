@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.room.Room
+import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import pl.piotrgorny.data.ReminderRepository
@@ -30,17 +31,37 @@ class DatabaseReminderRepository(context: Context) : ReminderRepository {
             }
         }
 
+    override suspend fun getForFilter(filterId: Long): List<FilterReminder> {
+        return filterReminderDao.getByFilter(filterId).map { it.toModel() }
+    }
+
     override suspend fun addReminder(reminder: FilterReminder) {
-        filterReminderDao.insert(reminder.toEntity(0))
+        filterReminderDao.insert(reminder.toEntity())
+    }
+
+    override suspend fun addReminders(reminders: List<FilterReminder>) {
+        filterReminderDao.insert(*reminders.map { reminder -> reminder.toEntity() }.toTypedArray())
+    }
+
+    override suspend fun setReminders(reminders: List<FilterReminder>) {
+        database.withTransaction {
+            filterReminderDao.clear()
+            addReminders(reminders)
+        }
+    }
+
+    override suspend fun removeRemindersByParentId(id: Long) {
+        filterReminderDao.deleteByFilter(id)
     }
 }
 
 fun FilterReminderEntity.toModel() = FilterReminder(
+    filterId,
     alarmDate,
     FilterReminder.Type.valueOf(type)
 )
 
-fun FilterReminder.toEntity(filterId: Long) = FilterReminderEntity(
+fun FilterReminder.toEntity() = FilterReminderEntity(
     filterId,
     alarmDate,
     type.name

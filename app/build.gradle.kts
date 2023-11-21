@@ -55,6 +55,8 @@ android {
 dependencies {
     implementation(project(Modules.Feature.filterSetup))
     implementation(project(Modules.Feature.reminder))
+    implementation(project(Modules.Core.data))
+    implementation(project(Modules.Core.model))
 
     implementation(Libraries.AndroidX.Core.ktx)
     implementation(Libraries.AndroidX.LifeCycle.lifecycleRuntimeKtx)
@@ -65,6 +67,8 @@ dependencies {
     implementation(Libraries.AndroidX.Compose.Ui.ui)
     implementation(Libraries.AndroidX.Compose.Ui.uiToolingPreview)
     implementation(Libraries.AndroidX.Compose.material)
+
+    implementation(Libraries.jodaTime)
 
     debugImplementation(Libraries.AndroidX.Compose.Ui.uiTooling)
     debugImplementation(Libraries.Test.Compose.testManifest)
