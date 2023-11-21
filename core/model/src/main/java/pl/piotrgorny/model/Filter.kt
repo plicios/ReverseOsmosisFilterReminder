@@ -21,7 +21,7 @@ data class Filter(
         null, type, installationDate, lifeSpan
     )
     constructor(type: Type) : this(
-        type, LocalDate(), LifeSpan.Half_Year
+        type, LocalDate(), LifeSpan.HalfYear
     )
 
     val expirationDate : LocalDate
@@ -31,6 +31,7 @@ data class Filter(
         get() = expirationDate.isBefore(LocalDate())
     @Parcelize
     sealed class Type : Parcelable {
+        @Suppress("ClassName")
         @Parcelize
         sealed class Sediment(val micronValue: Int) : Type() {
             object SedimentPS_20 : Sediment(20)
@@ -38,12 +39,7 @@ data class Filter(
             object SedimentPS_5 : Sediment(5)
             object SedimentPS_1 : Sediment(1)
 
-            object Any : Sediment(-1) {
-                override fun equals(other: kotlin.Any?): Boolean {
-                    if(other is Sediment) return true
-                    return super.equals(other)
-                }
-            }
+            object Any : Sediment(-1)
 
             override val name: String
                 get() = "Sediment:$micronValue"
@@ -51,6 +47,12 @@ data class Filter(
             override fun equals(other: kotlin.Any?): Boolean {
                 if(other is Any) return true
                 return super.equals(other)
+            }
+
+            override fun hashCode(): Int {
+                var result = super.hashCode()
+                result = 31 * result + micronValue
+                return result
             }
         }
         object Carbon : Type() {
@@ -116,8 +118,6 @@ data class Filter(
             if (this === other) return true
             if (other !is Type) return false
 
-            other as Type
-
             if (name != other.name) return false
 
             return true
@@ -129,15 +129,15 @@ data class Filter(
     }
 
     enum class LifeSpan(val period: ReadablePeriod) {
-        One_Week(Weeks.ONE),
-        Two_Weeks(Weeks.TWO),
-        Three_Weeks(Weeks.THREE),
-        One_Month(Months.ONE),
-        Two_Months(Months.TWO),
-        Three_Months(Months.THREE),
-        Half_Year(Months.SIX),
-        One_Year(Years.ONE),
-        Two_Years(Years.TWO),
-        Three_Years(Years.THREE)
+        OneWeek(Weeks.ONE),
+        TwoWeeks(Weeks.TWO),
+        ThreeWeeks(Weeks.THREE),
+        OneMonth(Months.ONE),
+        TwoMonths(Months.TWO),
+        ThreeMonths(Months.THREE),
+        HalfYear(Months.SIX),
+        OneYear(Years.ONE),
+        TwoYears(Years.TWO),
+        ThreeYears(Years.THREE)
     }
 }
