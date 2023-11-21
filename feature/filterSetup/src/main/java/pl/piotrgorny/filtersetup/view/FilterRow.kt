@@ -18,7 +18,6 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.joda.time.LocalDate
 import pl.piotrgorny.filtersetup.R
 import pl.piotrgorny.model.Filter
 
